@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # ----------------------------------------------------
+  # Serviço Web (PHP/CodeIgniter/Composer)
+  # ----------------------------------------------------
+  web:
+    # Constrói a imagem usando o Dockerfile no diretório 'docker/php'
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: fluxo_caixa
+    restart: unless-stopped
+    ports:
+      - "8080:80"  # Mapeia a porta 80 do contêiner para a porta 8080 do host
+    volumes:
+      # Monta o diretório local 'app' dentro do contêiner
+      - ./app:/var/www/html
+
+    # Executa os comandos antes de iniciar o Apache
+    # command: /bin/bash -c "chown -R www-data:www-data /var/www/html/writable && chmod -R 777 /var/www/html/writable && apache2-foreground"
+
+    environment:
+      # Define o nome do host do banco de dados para o CodeIgniter
+      DATABASE_HOSTNAME: fluxo_caixa_db
+      # Carrega variáveis de ambiente do CodeIgniter a partir do .env
+      # (Pode variar dependendo de como você configura seu .env no CI4)
+      CI_ENVIRONMENT: development
+    depends_on:
+      - fluxo_caixa_db  # Garante que o contêiner do banco de dados inicie primeiro
+
+  # ----------------------------------------------------
+  # Serviço de Banco de Dados (MySQL)
+  # ----------------------------------------------------
+  fluxo_caixa_db:
+    image: mysql:8.0  # Escolha a versão do MySQL que preferir
+    container_name: fluxo_caixa_db
+    restart: unless-stopped
+    # Variáveis de ambiente do MySQL (usadas pelo CodeIgniter)
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} # Senha do root (use o .env)
+      MYSQL_DATABASE: ${MYSQL_DATABASE} # Nome do BD (use o .env)
+      MYSQL_USER: ${MYSQL_USER}       # Usuário do BD (use o .env)
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}   # Senha do usuário (use o .env)
+    volumes:
+      # Armazena os dados do banco de dados em um volume persistente
+      - db_data:/var/lib/mysql
+    # Opcional: Para acessar o MySQL diretamente do host (ex: com MySQL Workbench)
+    ports:
+      - "3306:3306"
+
+ 
+  # Serviço do phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-app
+    restart: unless-stopped
+    ports:
+      - "8081:80" # Expõe a porta 80 do contêiner para a porta 8081 do host
+    environment:
+      PMA_HOST: fluxo_caixa_db # Conecta o phpMyAdmin ao contêiner do banco de dados
+      PMA_PORT: "3306:3306"
+    depends_on:
+      - fluxo_caixa_db # Garante que o serviço 'db' seja iniciado antes do 'phpmyadmin'
+
+
+  # Volumes de dados
+volumes:
+  db_data:
+

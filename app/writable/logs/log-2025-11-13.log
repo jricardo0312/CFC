@@ -1,0 +1,437 @@
+ERROR - 2025-11-13 18:03:26 --> Error connecting to the database: mysqli_sql_exception: Connection refused in /var/www/html/system/Database/MySQLi/Connection.php:201
+Stack trace:
+#0 /var/www/html/system/Database/MySQLi/Connection.php(201): mysqli->real_connect('127.0.0.1', 'user', Object(SensitiveParameterValue), 'fluxo_caixa_db', 3306, '', 0)
+#1 /var/www/html/system/Database/BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 /var/www/html/system/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+#3 /var/www/html/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 /var/www/html/system/Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 /var/www/html/system/BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 /var/www/html/app/Controllers/FinanceiroController.php(46): CodeIgniter\BaseModel->findAll()
+#7 /var/www/html/system/CodeIgniter.php(933): App\Controllers\FinanceiroController->index()
+#8 /var/www/html/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+#9 /var/www/html/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 /var/www/html/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#11 /var/www/html/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 /var/www/html/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Connection refused in /var/www/html/system/Database/MySQLi/Connection.php:246
+Stack trace:
+#0 /var/www/html/system/Database/BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 /var/www/html/system/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+#2 /var/www/html/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 /var/www/html/system/Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#4 /var/www/html/system/BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#5 /var/www/html/app/Controllers/FinanceiroController.php(46): CodeIgniter\BaseModel->findAll()
+#6 /var/www/html/system/CodeIgniter.php(933): App\Controllers\FinanceiroController->index()
+#7 /var/www/html/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+#8 /var/www/html/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 /var/www/html/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#10 /var/www/html/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 /var/www/html/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2025-11-13 18:03:26 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Connection refused
+[Method: GET, Route: /]
+in SYSTEMPATH/Database/BaseConnection.php on line 465.
+ 1 SYSTEMPATH/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `transacoes`
+WHERE `tipo` = :tipo:
+AND `status` = :status:', [...], false)
+ 3 SYSTEMPATH/Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH/BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH/Controllers/FinanceiroController.php(46): CodeIgniter\BaseModel->findAll()
+ 6 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\FinanceiroController->index()
+ 7 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+ 8 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-11-13 18:05:06 --> Error connecting to the database: mysqli_sql_exception: Connection refused in /var/www/html/system/Database/MySQLi/Connection.php:201
+Stack trace:
+#0 /var/www/html/system/Database/MySQLi/Connection.php(201): mysqli->real_connect('127.0.0.1', 'user', Object(SensitiveParameterValue), 'fluxo_caixa_db', 3306, '', 0)
+#1 /var/www/html/system/Database/BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 /var/www/html/system/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+#3 /var/www/html/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 /var/www/html/system/Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 /var/www/html/system/BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 /var/www/html/app/Controllers/FinanceiroController.php(46): CodeIgniter\BaseModel->findAll()
+#7 /var/www/html/system/CodeIgniter.php(933): App\Controllers\FinanceiroController->index()
+#8 /var/www/html/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+#9 /var/www/html/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 /var/www/html/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#11 /var/www/html/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 /var/www/html/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Connection refused in /var/www/html/system/Database/MySQLi/Connection.php:246
+Stack trace:
+#0 /var/www/html/system/Database/BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 /var/www/html/system/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+#2 /var/www/html/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 /var/www/html/system/Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#4 /var/www/html/system/BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#5 /var/www/html/app/Controllers/FinanceiroController.php(46): CodeIgniter\BaseModel->findAll()
+#6 /var/www/html/system/CodeIgniter.php(933): App\Controllers\FinanceiroController->index()
+#7 /var/www/html/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+#8 /var/www/html/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 /var/www/html/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#10 /var/www/html/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 /var/www/html/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2025-11-13 18:05:06 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Connection refused
+[Method: GET, Route: /]
+in SYSTEMPATH/Database/BaseConnection.php on line 465.
+ 1 SYSTEMPATH/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `transacoes`
+WHERE `tipo` = :tipo:
+AND `status` = :status:', [...], false)
+ 3 SYSTEMPATH/Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH/BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH/Controllers/FinanceiroController.php(46): CodeIgniter\BaseModel->findAll()
+ 6 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\FinanceiroController->index()
+ 7 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+ 8 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-11-13 18:05:14 --> Error connecting to the database: mysqli_sql_exception: Connection refused in /var/www/html/system/Database/MySQLi/Connection.php:201
+Stack trace:
+#0 /var/www/html/system/Database/MySQLi/Connection.php(201): mysqli->real_connect('127.0.0.1', 'user', Object(SensitiveParameterValue), 'fluxo_caixa_db', 3306, '', 0)
+#1 /var/www/html/system/Database/BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 /var/www/html/system/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+#3 /var/www/html/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 /var/www/html/system/Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 /var/www/html/system/BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 /var/www/html/app/Controllers/FinanceiroController.php(46): CodeIgniter\BaseModel->findAll()
+#7 /var/www/html/system/CodeIgniter.php(933): App\Controllers\FinanceiroController->index()
+#8 /var/www/html/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+#9 /var/www/html/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 /var/www/html/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#11 /var/www/html/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 /var/www/html/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Connection refused in /var/www/html/system/Database/MySQLi/Connection.php:246
+Stack trace:
+#0 /var/www/html/system/Database/BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 /var/www/html/system/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+#2 /var/www/html/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 /var/www/html/system/Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#4 /var/www/html/system/BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#5 /var/www/html/app/Controllers/FinanceiroController.php(46): CodeIgniter\BaseModel->findAll()
+#6 /var/www/html/system/CodeIgniter.php(933): App\Controllers\FinanceiroController->index()
+#7 /var/www/html/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+#8 /var/www/html/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 /var/www/html/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#10 /var/www/html/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 /var/www/html/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2025-11-13 18:05:14 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Connection refused
+[Method: GET, Route: /]
+in SYSTEMPATH/Database/BaseConnection.php on line 465.
+ 1 SYSTEMPATH/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `transacoes`
+WHERE `tipo` = :tipo:
+AND `status` = :status:', [...], false)
+ 3 SYSTEMPATH/Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH/BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH/Controllers/FinanceiroController.php(46): CodeIgniter\BaseModel->findAll()
+ 6 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\FinanceiroController->index()
+ 7 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+ 8 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-11-13 18:05:32 --> Error connecting to the database: mysqli_sql_exception: Connection refused in /var/www/html/system/Database/MySQLi/Connection.php:201
+Stack trace:
+#0 /var/www/html/system/Database/MySQLi/Connection.php(201): mysqli->real_connect('127.0.0.1', 'user', Object(SensitiveParameterValue), 'fluxo_caixa_db', 3306, '', 0)
+#1 /var/www/html/system/Database/BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 /var/www/html/system/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+#3 /var/www/html/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 /var/www/html/system/Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 /var/www/html/system/BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#6 /var/www/html/app/Controllers/FinanceiroController.php(46): CodeIgniter\BaseModel->findAll()
+#7 /var/www/html/system/CodeIgniter.php(933): App\Controllers\FinanceiroController->index()
+#8 /var/www/html/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+#9 /var/www/html/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 /var/www/html/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#11 /var/www/html/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 /var/www/html/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Connection refused in /var/www/html/system/Database/MySQLi/Connection.php:246
+Stack trace:
+#0 /var/www/html/system/Database/BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 /var/www/html/system/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+#2 /var/www/html/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 /var/www/html/system/Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#4 /var/www/html/system/BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+#5 /var/www/html/app/Controllers/FinanceiroController.php(46): CodeIgniter\BaseModel->findAll()
+#6 /var/www/html/system/CodeIgniter.php(933): App\Controllers\FinanceiroController->index()
+#7 /var/www/html/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+#8 /var/www/html/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 /var/www/html/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#10 /var/www/html/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 /var/www/html/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2025-11-13 18:05:32 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Connection refused
+[Method: GET, Route: /]
+in SYSTEMPATH/Database/BaseConnection.php on line 465.
+ 1 SYSTEMPATH/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `transacoes`
+WHERE `tipo` = :tipo:
+AND `status` = :status:', [...], false)
+ 3 SYSTEMPATH/Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH/BaseModel.php(677): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH/Controllers/FinanceiroController.php(46): CodeIgniter\BaseModel->findAll()
+ 6 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\FinanceiroController->index()
+ 7 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+ 8 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-11-13 18:26:47 --> Error connecting to the database: mysqli_sql_exception: Connection refused in /var/www/html/system/Database/MySQLi/Connection.php:201
+Stack trace:
+#0 /var/www/html/system/Database/MySQLi/Connection.php(201): mysqli->real_connect('127.0.0.1', 'user', Object(SensitiveParameterValue), 'fluxo_caixa_db', 3306, '', 0)
+#1 /var/www/html/system/Database/BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 /var/www/html/system/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+#3 /var/www/html/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT SUM(CASE...', Array, false)
+#4 /var/www/html/system/Model.php(330): CodeIgniter\Database\BaseBuilder->get()
+#5 /var/www/html/system/BaseModel.php(715): CodeIgniter\Model->doFirst()
+#6 /var/www/html/app/Models/TransacaoModel.php(57): CodeIgniter\BaseModel->first()
+#7 /var/www/html/app/Controllers/FinanceiroController.php(154): App\Models\TransacaoModel->getFluxoLiquidoPorTipo('2025-11-01', '2025-11-30', 'FCO')
+#8 /var/www/html/system/CodeIgniter.php(933): App\Controllers\FinanceiroController->relatorioDFC()
+#9 /var/www/html/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+#10 /var/www/html/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 /var/www/html/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 /var/www/html/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 /var/www/html/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Connection refused in /var/www/html/system/Database/MySQLi/Connection.php:246
+Stack trace:
+#0 /var/www/html/system/Database/BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 /var/www/html/system/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+#2 /var/www/html/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT SUM(CASE...', Array, false)
+#3 /var/www/html/system/Model.php(330): CodeIgniter\Database\BaseBuilder->get()
+#4 /var/www/html/system/BaseModel.php(715): CodeIgniter\Model->doFirst()
+#5 /var/www/html/app/Models/TransacaoModel.php(57): CodeIgniter\BaseModel->first()
+#6 /var/www/html/app/Controllers/FinanceiroController.php(154): App\Models\TransacaoModel->getFluxoLiquidoPorTipo('2025-11-01', '2025-11-30', 'FCO')
+#7 /var/www/html/system/CodeIgniter.php(933): App\Controllers\FinanceiroController->relatorioDFC()
+#8 /var/www/html/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+#9 /var/www/html/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 /var/www/html/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#11 /var/www/html/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 /var/www/html/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 {main}
+CRITICAL - 2025-11-13 18:26:47 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Connection refused
+[Method: GET, Route: dfc]
+in SYSTEMPATH/Database/BaseConnection.php on line 465.
+ 1 SYSTEMPATH/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT SUM(CASE WHEN t.tipo = \'RECEBER\' THEN t.valor ELSE 0 END) AS entradas, SUM(CASE WHEN t.tipo = \'PAGAR\' THEN t.valor ELSE 0 END) AS saidas, (SUM(CASE WHEN t.tipo = \'RECEBER\' THEN t.valor ELSE 0 END) - SUM(CASE WHEN t.tipo = \'PAGAR\' THEN t.valor ELSE 0 END)) AS liquido
+FROM (`transacoes`, `transacoes` `t`)
+JOIN `categorias_financeiras` `c` ON `t`.`categoria_id` = `c`.`id`
+WHERE `t`.`status` = :t.status:
+AND `c`.`tipo_fluxo` = :c.tipo_fluxo:
+AND `t`.`data_caixa` >= :t.data_caixa:
+AND `t`.`data_caixa` <= :t.data_caixa.1:
+ LIMIT 1', [...], false)
+ 3 SYSTEMPATH/Model.php(330): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH/BaseModel.php(715): CodeIgniter\Model->doFirst()
+ 5 APPPATH/Models/TransacaoModel.php(57): CodeIgniter\BaseModel->first()
+ 6 APPPATH/Controllers/FinanceiroController.php(154): App\Models\TransacaoModel->getFluxoLiquidoPorTipo('2025-11-01', '2025-11-30', 'FCO')
+ 7 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\FinanceiroController->relatorioDFC()
+ 8 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+ 9 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-11-13 18:27:23 --> Error connecting to the database: mysqli_sql_exception: Connection refused in /var/www/html/system/Database/MySQLi/Connection.php:201
+Stack trace:
+#0 /var/www/html/system/Database/MySQLi/Connection.php(201): mysqli->real_connect('127.0.0.1', 'user', Object(SensitiveParameterValue), 'fluxo_caixa_db', 3306, '', 0)
+#1 /var/www/html/system/Database/BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 /var/www/html/system/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+#3 /var/www/html/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT SUM(CASE...', Array, false)
+#4 /var/www/html/system/Model.php(330): CodeIgniter\Database\BaseBuilder->get()
+#5 /var/www/html/system/BaseModel.php(715): CodeIgniter\Model->doFirst()
+#6 /var/www/html/app/Models/TransacaoModel.php(57): CodeIgniter\BaseModel->first()
+#7 /var/www/html/app/Controllers/FinanceiroController.php(154): App\Models\TransacaoModel->getFluxoLiquidoPorTipo('2025-11-01', '2025-11-30', 'FCO')
+#8 /var/www/html/system/CodeIgniter.php(933): App\Controllers\FinanceiroController->relatorioDFC()
+#9 /var/www/html/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+#10 /var/www/html/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 /var/www/html/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 /var/www/html/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 /var/www/html/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Connection refused in /var/www/html/system/Database/MySQLi/Connection.php:246
+Stack trace:
+#0 /var/www/html/system/Database/BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 /var/www/html/system/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+#2 /var/www/html/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT SUM(CASE...', Array, false)
+#3 /var/www/html/system/Model.php(330): CodeIgniter\Database\BaseBuilder->get()
+#4 /var/www/html/system/BaseModel.php(715): CodeIgniter\Model->doFirst()
+#5 /var/www/html/app/Models/TransacaoModel.php(57): CodeIgniter\BaseModel->first()
+#6 /var/www/html/app/Controllers/FinanceiroController.php(154): App\Models\TransacaoModel->getFluxoLiquidoPorTipo('2025-11-01', '2025-11-30', 'FCO')
+#7 /var/www/html/system/CodeIgniter.php(933): App\Controllers\FinanceiroController->relatorioDFC()
+#8 /var/www/html/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+#9 /var/www/html/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 /var/www/html/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#11 /var/www/html/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 /var/www/html/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 {main}
+CRITICAL - 2025-11-13 18:27:23 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Connection refused
+[Method: GET, Route: dfc]
+in SYSTEMPATH/Database/BaseConnection.php on line 465.
+ 1 SYSTEMPATH/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT SUM(CASE WHEN t.tipo = \'RECEBER\' THEN t.valor ELSE 0 END) AS entradas, SUM(CASE WHEN t.tipo = \'PAGAR\' THEN t.valor ELSE 0 END) AS saidas, (SUM(CASE WHEN t.tipo = \'RECEBER\' THEN t.valor ELSE 0 END) - SUM(CASE WHEN t.tipo = \'PAGAR\' THEN t.valor ELSE 0 END)) AS liquido
+FROM (`transacoes`, `transacoes` `t`)
+JOIN `categorias_financeiras` `c` ON `t`.`categoria_id` = `c`.`id`
+WHERE `t`.`status` = :t.status:
+AND `c`.`tipo_fluxo` = :c.tipo_fluxo:
+AND `t`.`data_caixa` >= :t.data_caixa:
+AND `t`.`data_caixa` <= :t.data_caixa.1:
+ LIMIT 1', [...], false)
+ 3 SYSTEMPATH/Model.php(330): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH/BaseModel.php(715): CodeIgniter\Model->doFirst()
+ 5 APPPATH/Models/TransacaoModel.php(57): CodeIgniter\BaseModel->first()
+ 6 APPPATH/Controllers/FinanceiroController.php(154): App\Models\TransacaoModel->getFluxoLiquidoPorTipo('2025-11-01', '2025-11-30', 'FCO')
+ 7 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\FinanceiroController->relatorioDFC()
+ 8 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+ 9 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-11-13 18:27:24 --> Error connecting to the database: mysqli_sql_exception: Connection refused in /var/www/html/system/Database/MySQLi/Connection.php:201
+Stack trace:
+#0 /var/www/html/system/Database/MySQLi/Connection.php(201): mysqli->real_connect('127.0.0.1', 'user', Object(SensitiveParameterValue), 'fluxo_caixa_db', 3306, '', 0)
+#1 /var/www/html/system/Database/BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 /var/www/html/system/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+#3 /var/www/html/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT SUM(CASE...', Array, false)
+#4 /var/www/html/system/Model.php(330): CodeIgniter\Database\BaseBuilder->get()
+#5 /var/www/html/system/BaseModel.php(715): CodeIgniter\Model->doFirst()
+#6 /var/www/html/app/Models/TransacaoModel.php(57): CodeIgniter\BaseModel->first()
+#7 /var/www/html/app/Controllers/FinanceiroController.php(154): App\Models\TransacaoModel->getFluxoLiquidoPorTipo('2025-11-01', '2025-11-30', 'FCO')
+#8 /var/www/html/system/CodeIgniter.php(933): App\Controllers\FinanceiroController->relatorioDFC()
+#9 /var/www/html/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+#10 /var/www/html/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 /var/www/html/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#12 /var/www/html/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 /var/www/html/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Connection refused in /var/www/html/system/Database/MySQLi/Connection.php:246
+Stack trace:
+#0 /var/www/html/system/Database/BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 /var/www/html/system/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+#2 /var/www/html/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT SUM(CASE...', Array, false)
+#3 /var/www/html/system/Model.php(330): CodeIgniter\Database\BaseBuilder->get()
+#4 /var/www/html/system/BaseModel.php(715): CodeIgniter\Model->doFirst()
+#5 /var/www/html/app/Models/TransacaoModel.php(57): CodeIgniter\BaseModel->first()
+#6 /var/www/html/app/Controllers/FinanceiroController.php(154): App\Models\TransacaoModel->getFluxoLiquidoPorTipo('2025-11-01', '2025-11-30', 'FCO')
+#7 /var/www/html/system/CodeIgniter.php(933): App\Controllers\FinanceiroController->relatorioDFC()
+#8 /var/www/html/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+#9 /var/www/html/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 /var/www/html/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#11 /var/www/html/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 /var/www/html/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 {main}
+CRITICAL - 2025-11-13 18:27:24 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Connection refused
+[Method: GET, Route: dfc]
+in SYSTEMPATH/Database/BaseConnection.php on line 465.
+ 1 SYSTEMPATH/Database/BaseConnection.php(614): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT SUM(CASE WHEN t.tipo = \'RECEBER\' THEN t.valor ELSE 0 END) AS entradas, SUM(CASE WHEN t.tipo = \'PAGAR\' THEN t.valor ELSE 0 END) AS saidas, (SUM(CASE WHEN t.tipo = \'RECEBER\' THEN t.valor ELSE 0 END) - SUM(CASE WHEN t.tipo = \'PAGAR\' THEN t.valor ELSE 0 END)) AS liquido
+FROM (`transacoes`, `transacoes` `t`)
+JOIN `categorias_financeiras` `c` ON `t`.`categoria_id` = `c`.`id`
+WHERE `t`.`status` = :t.status:
+AND `c`.`tipo_fluxo` = :c.tipo_fluxo:
+AND `t`.`data_caixa` >= :t.data_caixa:
+AND `t`.`data_caixa` <= :t.data_caixa.1:
+ LIMIT 1', [...], false)
+ 3 SYSTEMPATH/Model.php(330): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH/BaseModel.php(715): CodeIgniter\Model->doFirst()
+ 5 APPPATH/Models/TransacaoModel.php(57): CodeIgniter\BaseModel->first()
+ 6 APPPATH/Controllers/FinanceiroController.php(154): App\Models\TransacaoModel->getFluxoLiquidoPorTipo('2025-11-01', '2025-11-30', 'FCO')
+ 7 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\FinanceiroController->relatorioDFC()
+ 8 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FinanceiroController))
+ 9 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2025-11-13 18:27:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-11-13 18:38:32 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "Pessoas/index.php"
+[Method: GET, Route: pessoas]
+in SYSTEMPATH/Exceptions/FrameworkException.php on line 39.
+ 1 SYSTEMPATH/View/View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('Pessoas/index.php')
+ 2 SYSTEMPATH/Common.php(1167): CodeIgniter\View\View->render('Pessoas/index', [], true)
+ 3 APPPATH/Controllers/PessoasController.php(28): view('Pessoas/index', [...])
+ 4 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\PessoasController->index()
+ 5 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PessoasController))
+ 6 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2025-11-13 18:40:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-13 18:41:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-13 18:45:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-13 18:45:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-13 18:45:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-13 18:46:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-13 18:46:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-11-13 18:54:01 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "Pessoas/index.php"
+[Method: GET, Route: pessoas/pessoas]
+in SYSTEMPATH/Exceptions/FrameworkException.php on line 39.
+ 1 SYSTEMPATH/View/View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('Pessoas/index.php')
+ 2 SYSTEMPATH/Common.php(1167): CodeIgniter\View\View->render('Pessoas/index', [], true)
+ 3 APPPATH/Controllers/PessoasController.php(27): view('Pessoas/index', [...])
+ 4 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\PessoasController->index()
+ 5 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PessoasController))
+ 6 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2025-11-13 18:55:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-13 19:03:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-13 19:03:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-11-13 19:33:15 --> ParseError: syntax error, unexpected token "&"
+[Method: GET, Route: pessoas]
+in APPPATH/Controllers/PessoasController.php on line 20.
+ 1 SYSTEMPATH/Autoloader/Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('/var/www/html/app/Controllers/PessoasController.php')
+ 2 SYSTEMPATH/Autoloader/Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\PessoasController')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\PessoasController')
+ 4 SYSTEMPATH/CodeIgniter.php(885): class_exists('\\App\\Controllers\\PessoasController', true)
+ 5 SYSTEMPATH/CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2025-11-13 19:33:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-13 19:37:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-13 19:37:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-11-13 19:42:19 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "Pessoas/index.php"
+[Method: GET, Route: pessoas]
+in SYSTEMPATH/Exceptions/FrameworkException.php on line 39.
+ 1 SYSTEMPATH/View/View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('Pessoas/index.php')
+ 2 SYSTEMPATH/Common.php(1167): CodeIgniter\View\View->render('Pessoas/index', [], true)
+ 3 APPPATH/Controllers/PessoasController.php(27): view('Pessoas/index', [...])
+ 4 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\PessoasController->index()
+ 5 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PessoasController))
+ 6 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2025-11-13 19:43:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-13 19:43:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-13 19:43:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-13 19:43:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
