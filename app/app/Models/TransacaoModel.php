@@ -8,52 +8,103 @@ class TransacaoModel extends Model
 {
     protected $table = 'transacoes';
     protected $primaryKey = 'id';
-    protected $allowedFields = [
-        'tipo',
-        'valor',
-        'data_vencimento',
-        'data_caixa',
-        'status',
-        'descricao',
-        'categoria_id',
-        'pessoa_id'
-    ];
+    protected $allowedFields = ['tipo', 'valor', 'data_vencimento', 'data_caixa', 'status', 'descricao', 'categoria_id', 'pessoa_id'];
     protected $useTimestamps = true;
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
 
-    // Regras de validação
+    // Adicionando as regras de validação que o Controller espera
     protected $validationRules = [
+        'id'               => 'permit_empty|is_natural_no_zero',
         'tipo'             => 'required|in_list[PAGAR,RECEBER]',
-        'valor'            => 'required|numeric',
+        'valor'            => 'required|numeric|greater_than[0]',
         'data_vencimento'  => 'required|valid_date',
-        'status'           => 'required|in_list[PENDENTE,CONCLUIDA]',
+        'descricao'        => 'required|max_length[255]',
         'categoria_id'     => 'required|is_natural_no_zero',
         'pessoa_id'        => 'required|is_natural_no_zero',
-        // data_caixa é obrigatória APENAS se o status for CONCLUIDA
-        'data_caixa'       => 'permit_empty|valid_date',
     ];
 
+    protected $validationMessages = [
+        'valor' => [
+            'required' => 'O campo Valor é obrigatório.',
+            'numeric' => 'O Valor deve ser um número.',
+            'greater_than' => 'O Valor deve ser maior que zero.',
+        ],
+        'tipo' => [
+            'in_list' => 'O Tipo deve ser "PAGAR" ou "RECEBER".',
+        ],
+        'categoria_id' => [
+            'required' => 'Selecione uma Categoria Financeira.',
+        ],
+        'pessoa_id' => [
+            'required' => 'Selecione a Pessoa (Cliente/Fornecedor).',
+        ],
+    ];
+
+
     /**
-     * Retorna o valor líquido do fluxo de caixa para um período e tipo de fluxo específicos.
-     * @param string $dataInicio
-     * @param string $dataFim
-     * @param string $tipoFluxo (FCO, FCI, FCF)
-     * @return array
+     * Calcula o fluxo de caixa líquido (Entradas - Saídas) para um tipo de fluxo DFC específico ('FCO', 'FCI', 'FCF') em um período.
+     * @param string $dataInicio Data inicial do período (YYYY-MM-DD).
+     * @param string $dataFim Data final do período (YYYY-MM-DD).
+     * @param string $tipoFluxo Tipo de Fluxo (FCO, FCI, FCF).
+     * @return array Contendo 'entradas', 'saidas' e 'liquido'.
      */
     public function getFluxoLiquidoPorTipo(string $dataInicio, string $dataFim, string $tipoFluxo): array
     {
-        return $this->select("
-                SUM(CASE WHEN t.tipo = 'RECEBER' THEN t.valor ELSE 0 END) AS entradas,
-                SUM(CASE WHEN t.tipo = 'PAGAR' THEN t.valor ELSE 0 END) AS saidas,
-                (SUM(CASE WHEN t.tipo = 'RECEBER' THEN t.valor ELSE 0 END) - SUM(CASE WHEN t.tipo = 'PAGAR' THEN t.valor ELSE 0 END)) AS liquido
-            ")
-            ->from('transacoes t')
-            ->join('categorias_financeiras c', 't.categoria_id = c.id')
-            ->where('t.status', 'CONCLUIDA')
-            ->where('c.tipo_fluxo', $tipoFluxo)
-            ->where('t.data_caixa >=', $dataInicio)
-            ->where('t.data_caixa <=', $dataFim)
-            ->first();
+        $builder = $this->db->table('transacoes t');
+        $builder->select('t.tipo, SUM(t.valor) as total_valor');
+        $builder->join('categorias_financeiras c', 't.categoria_id = c.id');
+        $builder->where('t.status', 'CONCLUIDA'); // Apenas transações que movimentaram o caixa
+        $builder->where('c.tipo_fluxo', $tipoFluxo);
+        $builder->where('t.data_caixa >=', $dataInicio . ' 00:00:00'); // Corrigido para datetime
+        $builder->where('t.data_caixa <=', $dataFim . ' 23:59:59');    // Corrigido para datetime
+        $builder->groupBy('t.tipo');
+
+        $results = $builder->get()->getResultArray();
+
+        $entradas = 0;
+        $saidas = 0;
+
+        foreach ($results as $row) {
+            if ($row['tipo'] === 'RECEBER') {
+                $entradas = (float) $row['total_valor'];
+            } elseif ($row['tipo'] === 'PAGAR') {
+                $saidas = (float) $row['total_valor'];
+            }
+        }
+
+        return [
+            'entradas' => $entradas,
+            'saidas' => $saidas,
+            'liquido' => $entradas - $saidas,
+        ];
+    }
+
+    // --------------------------------------------------------------------
+    // MÉTODO ADICIONADO (O QUE O CONTROLLER PRECISA)
+    // --------------------------------------------------------------------
+
+    /**
+     * Gera o relatório consolidado da DFC (Fluxo de Caixa) para um período.
+     * Utiliza o método getFluxoLiquidoPorTipo para calcular FCO, FCI e FCF.
+     * @param string $dataInicio
+     * @param string $dataFim
+     * @return array
+     */
+    public function gerarRelatorioDFC(string $dataInicio, string $dataFim): array
+    {
+        $fco = $this->getFluxoLiquidoPorTipo($dataInicio, $dataFim, 'FCO');
+        $fci = $this->getFluxoLiquidoPorTipo($dataInicio, $dataFim, 'FCI');
+        $fcf = $this->getFluxoLiquidoPorTipo($dataInicio, $dataFim, 'FCF');
+
+        $total_liquido = ($fco['liquido'] ?? 0) + ($fci['liquido'] ?? 0) + ($fcf['liquido'] ?? 0);
+
+        // Formata os resultados para facilitar a exibição
+        $dfc = [
+            'FCO' => $fco,
+            'FCI' => $fci,
+            'FCF' => $fcf,
+            'TOTAL' => $total_liquido
+        ];
+
+        return $dfc;
     }
 }

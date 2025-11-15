@@ -14,7 +14,7 @@ class PainelController extends Controller
     {
         $data = [
             'titulo' => 'Dashboard Financeiro',
-            'subtitulo' => 'Controle de Fluxo de Caixa para Clínica de Psicologia',
+            'subtitulo' => 'Controle de Fluxo de Caixa',
         ];
 
         // Agora chama a view em 'dashboard/index'

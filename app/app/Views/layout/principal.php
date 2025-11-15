@@ -29,7 +29,7 @@
                 <div class="flex-shrink-0">
                     <!-- Link para o Dashboard (Rota 'dashboard') -->
                     <a href="<?= route_to('dashboard') ?>" class="text-2xl font-extrabold text-indigo-600 hover:text-indigo-800 transition duration-150">
-                        DFC System
+                        SALUTEM Terapias Integradas LTDA
                     </a>
                 </div>
                 <!-- Navegação Principal com Rotas -->
@@ -73,7 +73,7 @@
     <footer class="bg-white border-t border-gray-200 mt-auto">
         <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
             <p class="text-center text-sm text-gray-500">
-                &copy; <?= date('Y') ?> DFC System.
+                &copy; <?= date('Y') ?> DFC System - Desenvolvido por: José Ricardo.
             </p>
         </div>
     </footer>

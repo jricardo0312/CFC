@@ -20,8 +20,9 @@ $this->section('conteudo');
     <!-- Cards de Módulos de CADASTRO (CRUD) -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
 
-        <!-- Card: Lançamento de Transações (Próximo Módulo) -->
-        <a href="#" class="block bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-[1.02]">
+        <!-- Card: Lançamento de Transações -->
+        <!-- CORRIGIDO: Aponta para o formulário de nova transação -->
+        <a href="<?= route_to('nova_transacao') ?>" class="block bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-[1.02]">
             <div class="flex items-center">
                 <div class="bg-indigo-100 p-3 rounded-full text-indigo-600 mr-4">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
@@ -71,8 +72,9 @@ $this->section('conteudo');
     <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4 border-b pb-2">Relatórios e Fluxo de Caixa</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
 
-        <!-- Card: Relatório DFC (A ser implementado) -->
-        <a href="#" class="block bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-[1.02] border-l-4 border-green-500">
+        <!-- Card: Relatório DFC -->
+        <!-- CORRIGIDO: Aponta para o relatório DFC -->
+        <a href="<?= route_to('relatorio_dfc') ?>" class="block bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-[1.02] border-l-4 border-green-500">
             <div class="flex items-center">
                 <div class="bg-green-100 p-3 rounded-full text-green-600 mr-4">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
@@ -87,7 +89,8 @@ $this->section('conteudo');
         </a>
 
         <!-- Card: Contas Pendentes (Dashboard Operacional) -->
-        <a href="#" class="block bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-[1.02] border-l-4 border-yellow-500">
+        <!-- CORRIGIDO: Aponta para o index do financeiro (listagem de pendentes) -->
+        <a href="<?= route_to('financeiro_index') ?>" class="block bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-[1.02] border-l-4 border-yellow-500">
             <div class="flex items-center">
                 <div class="bg-yellow-100 p-3 rounded-full text-yellow-600 mr-4">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
