@@ -54,7 +54,8 @@ $routes->group('financeiro', function ($routes) {
     $routes->post('liquidar/(:num)', 'FinanceiroController::liquidarCaixa/$1', ['as' => 'liquidar_caixa']);
 
     // Relatório DFC
-    $routes->match(['get', 'post'], 'dfc', 'FinanceiroController::relatorioDFC', ['as' => 'relatorio_dfc']);
+    $routes->match(['get', 'post'], 'financeiro/dfc', 'FinanceiroController::relatorioDFC', ['as' => 'relatorio_dfc']);
+    # $routes->match(['get', 'post'], 'relatorio_dfc', 'FinanceiroController::relatorioDFC', ['as' => 'relatorio_dfc']);
 });
 
 

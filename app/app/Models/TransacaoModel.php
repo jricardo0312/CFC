@@ -40,47 +40,43 @@ class TransacaoModel extends Model
     ];
 
 
-    /**
-     * Calcula o fluxo de caixa líquido (Entradas - Saídas) para um tipo de fluxo DFC específico ('FCO', 'FCI', 'FCF') em um período.
-     * @param string $dataInicio Data inicial do período (YYYY-MM-DD).
-     * @param string $dataFim Data final do período (YYYY-MM-DD).
-     * @param string $tipoFluxo Tipo de Fluxo (FCO, FCI, FCF).
-     * @return array Contendo 'entradas', 'saidas' e 'liquido'.
-     */
-    public function getFluxoLiquidoPorTipo(string $dataInicio, string $dataFim, string $tipoFluxo): array
-    {
-        $builder = $this->db->table('transacoes t');
-        $builder->select('t.tipo, SUM(t.valor) as total_valor');
-        $builder->join('categorias_financeiras c', 't.categoria_id = c.id');
-        $builder->where('t.status', 'CONCLUIDA'); // Apenas transações que movimentaram o caixa
-        $builder->where('c.tipo_fluxo', $tipoFluxo);
-        $builder->where('t.data_caixa >=', $dataInicio . ' 00:00:00'); // Corrigido para datetime
-        $builder->where('t.data_caixa <=', $dataFim . ' 23:59:59');    // Corrigido para datetime
-        $builder->groupBy('t.tipo');
+    // /**
+    //  * Calcula o fluxo de caixa líquido (Entradas - Saídas) para um tipo de fluxo DFC específico ('FCO', 'FCI', 'FCF') em um período.
+    //  * @param string $dataInicio Data inicial do período (YYYY-MM-DD).
+    //  * @param string $dataFim Data final do período (YYYY-MM-DD).
+    //  * @param string $tipoFluxo Tipo de Fluxo (FCO, FCI, FCF).
+    //  * @return array Contendo 'entradas', 'saidas' e 'liquido'.
+    //  */
+    // public function getFluxoLiquidoPorTipo(string $dataInicio, string $dataFim, string $tipoFluxo): array
+    // {
+    //     $builder = $this->db->table('transacoes t');
+    //     $builder->select('t.tipo, SUM(t.valor) as total_valor');
+    //     $builder->join('categorias_financeiras c', 't.categoria_id = c.id');
+    //     $builder->where('t.status', 'CONCLUIDA'); // Apenas transações que movimentaram o caixa
+    //     $builder->where('c.tipo_fluxo', $tipoFluxo);
+    //     $builder->where('t.data_caixa >=', $dataInicio . ' 00:00:00'); // Corrigido para datetime
+    //     $builder->where('t.data_caixa <=', $dataFim . ' 23:59:59');    // Corrigido para datetime
+    //     $builder->groupBy('t.tipo');
 
-        $results = $builder->get()->getResultArray();
+    //     $results = $builder->get()->getResultArray();
 
-        $entradas = 0;
-        $saidas = 0;
+    //     $entradas = 0;
+    //     $saidas = 0;
 
-        foreach ($results as $row) {
-            if ($row['tipo'] === 'RECEBER') {
-                $entradas = (float) $row['total_valor'];
-            } elseif ($row['tipo'] === 'PAGAR') {
-                $saidas = (float) $row['total_valor'];
-            }
-        }
+    //     foreach ($results as $row) {
+    //         if ($row['tipo'] === 'RECEBER') {
+    //             $entradas = (float) $row['total_valor'];
+    //         } elseif ($row['tipo'] === 'PAGAR') {
+    //             $saidas = (float) $row['total_valor'];
+    //         }
+    //     }
 
-        return [
-            'entradas' => $entradas,
-            'saidas' => $saidas,
-            'liquido' => $entradas - $saidas,
-        ];
-    }
-
-    // --------------------------------------------------------------------
-    // MÉTODO ADICIONADO (O QUE O CONTROLLER PRECISA)
-    // --------------------------------------------------------------------
+    //     return [
+    //         'entradas' => $entradas,
+    //         'saidas' => $saidas,
+    //         'liquido' => $entradas - $saidas,
+    //     ];
+    // }
 
     /**
      * Gera o relatório consolidado da DFC (Fluxo de Caixa) para um período.
@@ -91,6 +87,7 @@ class TransacaoModel extends Model
      */
     public function gerarRelatorioDFC(string $dataInicio, string $dataFim): array
     {
+        // Este método está CORRETO.
         $fco = $this->getFluxoLiquidoPorTipo($dataInicio, $dataFim, 'FCO');
         $fci = $this->getFluxoLiquidoPorTipo($dataInicio, $dataFim, 'FCI');
         $fcf = $this->getFluxoLiquidoPorTipo($dataInicio, $dataFim, 'FCF');
@@ -107,4 +104,57 @@ class TransacaoModel extends Model
 
         return $dfc;
     }
+
+    /**
+     * [MÉTODO CORRIGIDO E OTIMIZADO]
+     *
+     * Calcula o fluxo de caixa líquido (Entradas - Saídas) para um tipo de fluxo DFC específico ('FCO', 'FCI', 'FCF') em um período.
+     * Utiliza os nomes de coluna que você forneceu.
+     *
+     * @param string $dataInicio Data inicial do período (YYYY-MM-DD).
+     * @param string $dataFim Data final do período (YYYY-MM-DD).
+     * @param string $tipoFluxo Tipo de Fluxo (FCO, FCI, FCF).
+     * @return array Contendo 'entrada', 'saida' e 'liquido' (singular).
+     */
+    public function getFluxoLiquidoPorTipo(string $dataInicio, string $dataFim, string $tipoFluxo): array
+    {
+        $builder = $this->db->table('transacoes t');
+
+        $builder->select(
+            "COALESCE(SUM(CASE WHEN t.tipo = 'RECEBER' THEN t.valor ELSE 0 END), 0) as entradas, " . // O alias do SQL (plural)
+                "COALESCE(SUM(CASE WHEN t.tipo = 'PAGAR' THEN t.valor ELSE 0 END), 0) as saidas",   // O alias do SQL (plural)
+            false
+        );
+
+        $builder->join('categorias_financeiras c', 't.categoria_id = c.id');
+        $builder->where('t.status', 'CONCLUIDA');
+        $builder->where('c.tipo_fluxo', $tipoFluxo);
+        $builder->where('t.data_caixa >=', $dataInicio);
+        $builder->where('t.data_caixa <=', $dataFim);
+
+        $resultado = $builder->get()->getRow();
+
+        if (!$resultado) {
+            log_message('error', 'Falha na consulta DFC para o tipo: ' . $tipoFluxo);
+            // Retorna com as chaves no SINGULAR
+            return ['entrada' => 0, 'saida' => 0, 'liquido' => 0];
+        }
+
+        // As propriedades do $resultado (do SQL) vêm no plural
+        $entradas_sql = (float) $resultado->entradas;
+        $saidas_sql   = (float) $resultado->saidas;
+
+        // --- CORREÇÃO AQUI ---
+        // Retorna o array com as chaves no SINGULAR, como a View espera
+        return [
+            'entrada' => $entradas_sql,
+            'saida'   => $saidas_sql,
+            'liquido' => $entradas_sql - $saidas_sql,
+        ];
+    }
+    // --------------------------------------------------------------------
+    // MÉTODO ADICIONADO (O QUE O CONTROLLER PRECISA)
+    // --------------------------------------------------------------------
+
+
 }
