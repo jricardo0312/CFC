@@ -1,5 +1,8 @@
 # CFC
 
+*** ATENÇÃO: O SISTEMA ESTÁ EM VERSÃO BETA, SUJEITA A DIVERSOS ERROS IMPREVISÍVEIS  E FALHAS DE SEGURANÇA ***
+*** O USO É MERAMENTE PARA ESTUDO   *** N Ã O  D E V E   S E R  C O L O C A D O  E M  P R O D U Ç Ã O!!! ***
+
 💰 Sistema DFC para Clínica de Psicologia (Método Direto)
 
 Este é um projeto de sistema de gestão financeira focado na Demonstração dos Fluxos de Caixa (DFC) pelo Método Direto, desenvolvido em CodeIgniter 4. O objetivo é fornecer à clínica uma visão clara e contábil de suas movimentações de caixa, separando as atividades em Operacionais (FCO), de Investimento (FCI) e de Financiamento (FCF).
