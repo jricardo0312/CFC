@@ -1,7 +1,7 @@
 # CFC
 
 *** ATENÇÃO: O SISTEMA ESTÁ EM VERSÃO BETA, SUJEITA A DIVERSOS ERROS IMPREVISÍVEIS  E FALHAS DE SEGURANÇA ***
-*** O USO É MERAMENTE PARA ESTUDO   *** N Ã O  D E V E   S E R  C O L O C A D O  E M  P R O D U Ç Ã O!!! ***
+*** O USO É MERAMENTE PARA ESTUDO   *** NÃO DEVE SER COLOCADO EM PRODUÇÃO!!! ***
 
 💰 Sistema DFC para Clínica de Psicologia (Método Direto)
 
