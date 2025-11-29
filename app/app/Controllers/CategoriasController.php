@@ -2,8 +2,11 @@
 
 namespace App\Controllers;
 
-use App\Models\CategoriasFinanceirasModel; // Usaremos este Model
 use CodeIgniter\Controller;
+use App\Models\TransacaoModel;
+use App\Models\PessoaModel;
+use App\Models\CategoriasFinanceirasModel;
+
 
 class CategoriasController extends Controller
 {

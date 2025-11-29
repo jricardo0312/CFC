@@ -1,6 +1,14 @@
-<IfModule authz_core_module>
-	Require all denied
-</IfModule>
-<IfModule !authz_core_module>
-	Deny from all
+# Conteúdo correto do .htaccess na raiz do projeto
+<IfModule mod_rewrite.c>
+    Options +FollowSymLinks
+    RewriteEngine On
+
+    # Redireciona tudo que não for um arquivo ou diretório existente
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php/$1 [L,QSA]
+
+    # Trata o Authorization header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 </IfModule>

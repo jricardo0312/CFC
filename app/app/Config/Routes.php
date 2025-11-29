@@ -2,6 +2,9 @@
 
 namespace Config;
 
+use CodeIgniter\Router\RouteCollection;
+use App\Controllers\Auth;
+
 // Use a new instance of the RouteCollection class.
 $routes = Services::routes();
 
@@ -11,6 +14,7 @@ $routes->setDefaultController('Home');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
 $routes->set404Override();
+
 // $routes->setAutoRoute(false);
 
 /*
@@ -19,9 +23,25 @@ $routes->set404Override();
  * --------------------------------------------------------------------
  */
 
+// Rotas de Autenticação
+$routes->get('login', [Auth::class, 'login'], ['as' => 'login']);
+$routes->post('tentarLogin', [Auth::class, 'tentarLogin'], ['as' => 'tentarLogin']);
+$routes->get('logout', [Auth::class, 'logout'], ['as' => 'logout']);
+
+// Rotas de Cadastro (Opcional)
+$routes->get('register', [Auth::class, 'register'], ['as' => 'register']);
+$routes->post('createAccount', [Auth::class, 'createAccount'], ['as' => 'createAccount']);
+
+// Rota Protegida (Dashboard)
+// $routes->get('dashboard', 'Dashboard::index', ['as' => 'dashboard']);
+
+
 // 1. ROTA PADRÃO (DASHBOARD)
 // Mapeia a rota base (/) para o PainelController
-$routes->get('/', 'PainelController::index', ['as' => 'dashboard']);
+// $routes->get('/', 'PainelController::index', ['as' => 'dashboard']);
+$routes->get('painel', 'PainelController::index', ['as' => 'dashboard']);
+
+$routes->get('/', 'Auth::login');
 
 // 2. MÓDULO DE PESSOAS (CRUD Completo)
 $routes->group('pessoas', function ($routes) {
@@ -54,9 +74,16 @@ $routes->group('financeiro', function ($routes) {
     $routes->post('liquidar/(:num)', 'FinanceiroController::liquidarCaixa/$1', ['as' => 'liquidar_caixa']);
 
     // Relatório DFC
-    $routes->match(['get', 'post'], 'dfc', 'FinanceiroController::relatorioDFC', ['as' => 'relatorio_dfc']);
+    $routes->match(['get', 'post'], 'financeiro/dfc', 'FinanceiroController::relatorioDFC', ['as' => 'relatorio_dfc']);
+    // $routes->match(['get', 'post'], 'relatorio_dfc', 'FinanceiroController::relatorioDFC', ['as' => 'relatorio_dfc']);
 });
 
+// RELATORIO DE TRANSAÇÕES
+$routes->get('relatorio', 'RelatorioTransacaoController::index', ['as' => 'relatorio_index']);
+$routes->get('relatorio/exportarCsv', 'RelatorioTransacaoController::exportarCsv');
+$routes->get('teste', function () {
+    echo 'Rota funcionando!';
+});
 
 /*
  * --------------------------------------------------------------------

@@ -7,8 +7,11 @@ use App\Models\TransacaoModel;
 use App\Models\PessoaModel;
 use App\Models\CategoriasFinanceirasModel;
 
-class FinanceiroController extends Controller
+class FinanceiroController extends BaseController
 {
+    // Adicione esta propriedade para carregar o model
+    // protected $transacaoModel;
+
     /**
      * @var TransacaoModel
      */
@@ -24,6 +27,7 @@ class FinanceiroController extends Controller
      */
     private $categoriaModel;
 
+
     /**
      * Construtor para injetar os Models necessários.
      */
@@ -32,6 +36,9 @@ class FinanceiroController extends Controller
         $this->transacaoModel = new TransacaoModel();
         $this->pessoaModel = new PessoaModel();
         $this->categoriaModel = new CategoriasFinanceirasModel();
+
+        // Helpers (se ainda não estiverem no BaseController)
+        helper(['form', 'url']);
     }
 
     // --------------------------------------------------------------------
@@ -52,6 +59,7 @@ class FinanceiroController extends Controller
 
         return view('transacoes/index', $data);
     }
+
 
     // --------------------------------------------------------------------
     // MÓDULO: CADASTRO DE TRANSAÇÕES
@@ -124,6 +132,7 @@ class FinanceiroController extends Controller
         $dadosLiquidacao = [
             'id' => $id,
             'status' => 'CONCLUIDA',
+            // A data de caixa é a data da liquidação
             'data_caixa' => date('Y-m-d H:i:s'),
         ];
 
@@ -135,11 +144,6 @@ class FinanceiroController extends Controller
                 ->with('erro', 'Não foi possível liquidar a transação.');
         }
     }
-
-
-    // --------------------------------------------------------------------
-    // MÓDULO: RELATÓRIO DFC (Demonstração dos Fluxos de Caixa)
-    // --------------------------------------------------------------------
 
     /**
      * Exibe o formulário de filtro e o resultado do relatório DFC.
@@ -154,8 +158,8 @@ class FinanceiroController extends Controller
             'data_fim' => $this->request->getPost('data_fim') ?? date('Y-m-t'),
         ];
 
-        // Se o formulário foi submetido (POST)
-        if ($this->request->getMethod() === 'post') {
+        // Usar is('post') é a forma mais robusta no CI4
+        if ($this->request->is('post')) {
 
             $dataInicio = $this->request->getPost('data_inicio');
             $dataFim    = $this->request->getPost('data_fim');
@@ -163,11 +167,47 @@ class FinanceiroController extends Controller
             // Validação simples de datas
             if (!empty($dataInicio) && !empty($dataFim) && strtotime($dataFim) >= strtotime($dataInicio)) {
 
-                // Chamada ao método do Model
-                $data['dfc_resultados'] = $this->transacaoModel->gerarRelatorioDFC($dataInicio, $dataFim);
+                // 1. Busca os resultados do DFC para o período (FCO, FCI, FCF)
+                $resultados = $this->transacaoModel->gerarRelatorioDFC($dataInicio, $dataFim);
 
-                // Verificamos se o TOTAL (calculado pelo Model) é zero.
-                if ($data['dfc_resultados']['TOTAL'] == 0) {
+                // --- INÍCIO DA LÓGICA DE SALDO ANTERIOR ---
+
+                // 2. Calcula o saldo acumulado de TUDO antes da data de início.
+                // Usamos data_caixa, pois é um relatório de CAIXA (liquidado)
+                $saldoAnterior = $this->transacaoModel
+                    ->select("SUM(CASE WHEN tipo = 'ENTRADA' THEN valor ELSE -valor END) as saldo_acumulado")
+                    ->where('status', 'CONCLUIDA')
+                    ->where('data_caixa <', $dataInicio) // Importante: Apenas o que foi liquidado ANTES
+                    ->get()
+                    ->getRow()
+                    ->saldo_acumulado ?? 0;
+
+                // 3. Adiciona o saldo anterior ao array de resultados
+                // Primeiro, garante que $resultados é um array
+                if (!is_array($resultados)) {
+                    $resultados = [];
+                }
+
+                $resultados['SALDO_ANTERIOR'] = (float) $saldoAnterior;
+
+                // --- FIM DA LÓGICA DE SALDO ANTERIOR ---
+
+
+                // Lógica de verificação e mensagens (mantida)
+                if (!empty($resultados) && isset($resultados['TOTAL'])) {
+
+                    $data['dfc_resultados'] = $resultados;
+
+                    // Se não houve movimento NO PERÍODO e também não havia NADA antes.
+                    if ($resultados['TOTAL'] == 0 && $saldoAnterior == 0) {
+                        session()->setFlashdata('erro', 'Nenhuma movimentação de caixa (liquidada) foi encontrada no período ou antes dele.');
+                    }
+                    // Se não houve movimento no período, mas temos saldo anterior
+                    else if ($resultados['TOTAL'] == 0 && $saldoAnterior != 0) {
+                        session()->setFlashdata('sucesso', 'Nenhuma movimentação de caixa encontrada no período. O saldo final reflete apenas o saldo anterior.');
+                    }
+                } else {
+                    // Se o Model retornou vazio (null, [], false), definimos a mensagem de erro.
                     session()->setFlashdata('erro', 'Nenhuma transação liquidada (movimentação de caixa) foi encontrada no período selecionado.');
                 }
             } else {
@@ -175,6 +215,7 @@ class FinanceiroController extends Controller
             }
         }
 
+        // A view 'financeiro/relatorio_dfc' agora receberá $dfc_resultados['SALDO_ANTERIOR']
         return view('financeiro/relatorio_dfc', $data);
     }
 }

@@ -1,19 +1,35 @@
 <?php
-// Define o layout principal que esta view deve herdar
 $this->extend('layout/principal');
-
-// Define a seção 'conteudo' que será injetada no layout
 $this->section('conteudo');
+
+// --- LÓGICA DE ORDENAÇÃO ---
+$currentOrdem   = isset($ordem) ? $ordem : 'id';
+$currentDirecao = isset($direcao) ? $direcao : 'asc';
+
+$proximaDirId   = ($currentOrdem === 'id' && $currentDirecao === 'asc') ? 'desc' : 'asc';
+$proximaDirNome = ($currentOrdem === 'nome' && $currentDirecao === 'asc') ? 'desc' : 'asc';
+
+// Mantemos os parâmetros na URL
+$linkId   = site_url("pessoas?ordem=id&direcao={$proximaDirId}");
+$linkNome = site_url("pessoas?ordem=nome&direcao={$proximaDirNome}");
+
+// Ícones de Ordenação
+$setaCima   = '<span class="text-indigo-600 ml-1">▲</span>';
+$setaBaixo  = '<span class="text-indigo-600 ml-1">▼</span>';
+$setaNeutra = '<span class="text-gray-300 ml-1 opacity-50">⇅</span>';
+
+$iconeId = ($currentOrdem === 'id') ? (($currentDirecao === 'asc') ? $setaCima : $setaBaixo) : $setaNeutra;
+$iconeNome = ($currentOrdem === 'nome') ? (($currentDirecao === 'asc') ? $setaCima : $setaBaixo) : $setaNeutra;
 ?>
 
 <div class="container mx-auto px-4 py-8">
 
-    <!-- Título e Botão de Cadastro -->
     <div class="flex justify-between items-center mb-6 pb-2 border-b border-gray-300">
         <h1 class="text-3xl font-bold text-gray-800">
-            <?= esc($titulo) ?>
+            <?= esc($titulo ?? 'Lista de Pessoas') ?>
         </h1>
-        <a href="<?= route_to('pessoas_nova') ?>" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 flex items-center">
+
+        <a href="<?= site_url('pessoas/nova') ?>" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
             </svg>
@@ -21,92 +37,119 @@ $this->section('conteudo');
         </a>
     </div>
 
-    <!-- Mensagens Flash (Sucesso ou Erro) -->
     <?php if (session()->getFlashdata('sucesso')): ?>
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-            <span class="block sm:inline"><?= session()->getFlashdata('sucesso') ?></span>
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+            <?= session()->getFlashdata('sucesso') ?>
         </div>
     <?php endif; ?>
 
     <?php if (session()->getFlashdata('erro')): ?>
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-            <span class="block sm:inline"><?= session()->getFlashdata('erro') ?></span>
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            <?= session()->getFlashdata('erro') ?>
         </div>
     <?php endif; ?>
 
+    <div class="bg-white rounded-xl shadow-lg overflow-x-auto mb-6">
 
-    <!-- Tabela de Pessoas -->
-    <div class="bg-white rounded-xl shadow-lg overflow-x-auto">
         <?php if (empty($pessoas)): ?>
-
-            <!-- Mensagem se não houver pessoas -->
             <div class="p-6 text-center text-gray-500">
-                Nenhuma pessoa cadastrada ainda. Clique em "Nova Pessoa" para começar.
+                Nenhuma pessoa cadastrada ainda.
             </div>
-
         <?php else: ?>
 
-            <!-- Tabela com os dados -->
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Documento (CPF/CNPJ)</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
+                            <a href="<?= $linkId ?>" class="block w-full h-full select-none" title="Ordenar por ID">
+                                ID <?= $iconeId ?>
+                            </a>
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
+                            <a href="<?= $linkNome ?>" class="block w-full h-full select-none" title="Ordenar por Nome">
+                                NOME <?= $iconeNome ?>
+                            </a>
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Documento</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">E-mail</th>
                         <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-
                     <?php foreach ($pessoas as $pessoa): ?>
-                        <tr>
+                        <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                <?= esc($pessoa['id']) ?>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium">
                                 <?= esc($pessoa['nome']) ?>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                <span class="font-medium"><?= esc($pessoa['tipo_documento']) ?>:</span> <?= esc($pessoa['documento']) ?>
+                                <span class="text-xs font-bold text-gray-500 mr-1"><?= esc($pessoa['tipo_documento']) ?>:</span>
+                                <?= esc($pessoa['documento']) ?>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                 <?= esc($pessoa['email']) ?>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
 
-                                <!-- Link de Edição (AGORA APONTA PARA A ROTA CORRETA) -->
-                                <a href="<?= route_to('pessoas_editar', $pessoa['id']) ?>" class="text-indigo-600 hover:text-indigo-900 transition duration-150" title="Editar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zm-1.897 2.016l-2.73 2.73L9 12.593l-.707.707-.707-.707-1.414 1.414.707.707-.707.707-1.414 1.414 1.414 1.414 4.242-4.242 2.73-2.73L13.586 7.586a2 2 0 112.828 2.828l-5.657 5.657-3.535.707.707-3.535 5.657-5.657z" />
+                                <a href="<?= site_url('pessoas/editar/' . $pessoa['id']) ?>" class="text-indigo-600 hover:text-indigo-900 inline-block transition-colors" title="Editar">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                     </svg>
                                 </a>
 
-                                <!-- Formulário de Exclusão -->
-                                <form action="<?= route_to('pessoas_excluir', $pessoa['id']) ?>" method="post" class="inline-block" onsubmit="return confirm('Tem certeza que deseja excluir esta pessoa? Esta ação é irreversível.');">
-
-                                    <!-- Proteção CSRF -->
+                                <form action="<?= site_url('pessoas/excluir/' . $pessoa['id']) ?>" method="post" class="inline-block" onsubmit="return confirm('Tem certeza que deseja excluir?');">
                                     <?= csrf_field() ?>
-
-                                    <!-- Define o método real como DELETE -->
                                     <input type="hidden" name="_method" value="DELETE">
-
-                                    <button type="submit" class="text-red-600 hover:text-red-900 transition duration-150" title="Excluir">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm3 3a1 1 0 011-1h.01a1 1 0 110 2H11a1 1 0 01-1-1z" clip-rule="evenodd" />
+                                    <button type="submit" class="text-red-600 hover:text-red-900 transition-colors" title="Excluir">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                         </svg>
                                     </button>
                                 </form>
-
                             </td>
                         </tr>
                     <?php endforeach; ?>
-
                 </tbody>
             </table>
 
         <?php endif; ?>
     </div>
 
-</div>
+    <div class="flex justify-center mt-4">
+        <?= $pager->links('default', 'default_full') ?>
+    </div>
 
-<?php
-// Fecha a seção 'conteudo'
-$this->endSection();
-?>
+    <style>
+        .pagination {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+        }
+
+        .pagination li a,
+        .pagination li span {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            color: #4b5563;
+            background-color: white;
+            text-decoration: none;
+        }
+
+        .pagination li.active a,
+        .pagination li.active span {
+            background-color: #4f46e5;
+            /* Indigo-600 */
+            color: white;
+            border-color: #4f46e5;
+        }
+
+        .pagination li a:hover {
+            background-color: #f3f4f6;
+        }
+    </style>
+
+</div>
+<?php $this->endSection(); ?>

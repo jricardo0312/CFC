@@ -34,6 +34,7 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'auth'          => \App\Filters\AuthFilter::class,
     ];
 
     /**
@@ -72,9 +73,27 @@ class Filters extends BaseFilters
      */
     public array $globals = [
         'before' => [
-            // 'honeypot',
-            // 'csrf',
-            // 'invalidchars',
+            'auth' => [
+                // O filtro 'auth' será aplicado a TUDO, exceto:
+                'except' => [
+                    // Rotas Públicas (sem necessidade de login)
+                    // 'teste',
+                    // 'relatorio',
+                    '/',                 // A rota raiz (se ela aponta para a tela de login)
+                    'login',            // Alias da rota de login (GET)
+                    'tentarLogin',   // Alias da rota de submissão do formulário de login (POST)
+                    // 'register',      // Alias da rota de cadastro (GET)
+                    // 'createAccount'  // Alias da rota de submissão do formulário de cadastro (POST)
+
+                    // 'dashboard', // Rota principal de acesso restrito
+                    // Adicione aqui outras rotas ou prefixos que devem ser protegidos, ex: 'admin/*'
+                    // 'honeypot',
+                    // 'csrf',
+                    // 'invalidchars',
+                ]
+            ]
+
+
         ],
         'after' => [
             // 'honeypot',
@@ -106,5 +125,12 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, list<string>>>
      */
-    public array $filters = [];
+    // public array $filters = [
+    //     'auth' => [ // <-- A CHAVE AQUI DEVE SER O ALIAS 'auth'
+    //         'before' => [
+    //             'dashboard', // Aplica o filtro 'auth' à rota 'dashboard'
+    //             // adicione outras rotas protegidas aqui
+    //         ],
+    //     ],
+    // ];
 }

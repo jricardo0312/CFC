@@ -1,6 +1,7 @@
 <?php
 // Este arquivo é o esqueleto HTML que todas as views estendem.
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -40,6 +41,12 @@
                         <a href="<?= route_to('pessoas_index') ?>" class="text-gray-500 hover:bg-indigo-50 hover:text-indigo-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150">Pessoas</a>
                         <a href="<?= route_to('categorias_index') ?>" class="text-gray-500 hover:bg-indigo-50 hover:text-indigo-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150">Categorias</a>
                         <a href="<?= route_to('relatorio_dfc') ?>" class="text-gray-500 hover:bg-indigo-50 hover:text-indigo-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150">Relatório DFC</a>
+                        <a href="<?= route_to('relatorio_index') ?>" class="text-gray-500 hover:bg-indigo-50 hover:text-indigo-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150">Relatório Transações</a>
+
+                        <a href="<?= url_to('Auth::logout') ?>"
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            Sair
+                        </a>
                     </div>
                 </nav>
             </div>
