@@ -3,71 +3,126 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link href="/css/tailwind.css" rel="stylesheet"> -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Cadastro | Criar Conta</title>
 
+    <link rel="stylesheet" href="<?= base_url('assets/css/bulma.min.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/all.min.css') ?>">
 </head>
 
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<body>
 
-    <div class="w-full max-w-lg p-8 space-y-6 bg-white rounded-lg shadow-xl">
-        <h2 class="text-3xl font-bold text-center text-gray-900">Criar Nova Conta</h2>
+    <section class="hero is-light is-fullheight">
+        <div class="hero-body">
+            <div class="container">
+                <div class="columns is-centered">
 
-        <?php if (session()->getFlashdata('errors')): ?>
-            <div class="p-3 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
-                <p class="font-bold">Por favor, corrija os seguintes erros:</p>
-                <ul>
-                    <?php foreach (session()->getFlashdata('errors') as $error): ?>
-                        <li class="list-disc ml-4"><?= $error ?></li>
-                    <?php endforeach; ?>
-                </ul>
+                    <div class="column is-5-tablet is-4-desktop">
+
+                        <div class="has-text-centered mb-5">
+                            <h2 class="title is-3 has-text-grey-darker">Criar Nova Conta</h2>
+                            <p class="subtitle is-6 has-text-grey">Preencha os dados abaixo</p>
+                        </div>
+
+                        <div class="box">
+
+                            <?php if (session()->getFlashdata('errors')): ?>
+                                <div class="notification is-danger is-light is-small">
+                                    <button class="delete"></button>
+                                    <p class="has-text-weight-bold mb-1">Por favor, corrija os erros:</p>
+                                    <ul class="ml-4" style="list-style-type: disc;">
+                                        <?php foreach (session()->getFlashdata('errors') as $error): ?>
+                                            <li><?= esc($error) ?></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            <?php endif; ?>
+
+                            <form action="<?= url_to('Auth::createAccount') ?>" method="POST">
+
+                                <?= csrf_field() ?>
+
+                                <div class="field">
+                                    <label class="label" for="nome">Nome Completo</label>
+                                    <div class="control has-icons-left">
+                                        <input type="text" name="nome" id="nome" required
+                                            class="input"
+                                            value="<?= old('nome') ?>"
+                                            placeholder="Seu nome">
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="field">
+                                    <label class="label" for="email">Email</label>
+                                    <div class="control has-icons-left">
+                                        <input type="email" name="email" id="email" required
+                                            class="input"
+                                            value="<?= old('email') ?>"
+                                            placeholder="seu@email.com">
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-envelope"></i>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="field">
+                                    <label class="label" for="senha">Senha</label>
+                                    <div class="control has-icons-left">
+                                        <input type="password" name="senha" id="senha" required
+                                            class="input"
+                                            placeholder="Mínimo 8 caracteres">
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-lock"></i>
+                                        </span>
+                                    </div>
+                                    <p class="help">Use uma senha forte com letras e números.</p>
+                                </div>
+
+                                <div class="field">
+                                    <label class="label" for="confirma_senha">Confirmar Senha</label>
+                                    <div class="control has-icons-left">
+                                        <input type="password" name="confirma_senha" id="confirma_senha" required
+                                            class="input"
+                                            placeholder="Repita a senha">
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-check-circle"></i>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="field mt-5">
+                                    <button type="submit" class="button is-success is-fullwidth">
+                                        <strong>Cadastrar</strong>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="has-text-centered mt-4">
+                            <a href="<?= url_to('Auth::login') ?>" class="is-size-7 has-text-link">
+                                Já tem conta? <strong>Fazer Login</strong>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-        <?php endif; ?>
-
-        <form class="space-y-4" action="<?= url_to('Auth::createAccount') ?>" method="POST">
-
-            <div>
-                <label for="nome" class="block text-sm font-medium text-gray-700">Nome Completo</label>
-                <input type="text" name="nome" id="nome" required
-                    class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                    value="<?= old('nome') ?>" placeholder="Seu nome">
-            </div>
-
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input type="email" name="email" id="email" required
-                    class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                    value="<?= old('email') ?>" placeholder="seu@email.com">
-            </div>
-
-            <div>
-                <label for="senha" class="block text-sm font-medium text-gray-700">Senha (mínimo 8 caracteres)</label>
-                <input type="password" name="senha" id="senha" required
-                    class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="Crie uma senha forte">
-            </div>
-
-            <div>
-                <label for="confirma_senha" class="block text-sm font-medium text-gray-700">Confirmar Senha</label>
-                <input type="password" name="confirma_senha" id="confirma_senha" required
-                    class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="Repita a senha">
-            </div>
-
-            <button type="submit"
-                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                Cadastrar
-            </button>
-        </form>
-
-        <div class="text-sm text-center">
-            <a href="<?= url_to('Auth::login') ?>" class="font-medium text-indigo-600 hover:text-indigo-500">
-                Já tem conta? Fazer Login
-            </a>
         </div>
-    </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+                const $notification = $delete.parentNode;
+                $delete.addEventListener('click', () => {
+                    $notification.parentNode.removeChild($notification);
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -9,128 +9,169 @@ $this->section('conteudo');
 $is_edit = isset($transacao);
 ?>
 
-<div class="container mx-auto px-4 py-8 max-w-4xl">
+<div class="columns is-centered">
+    <div class="column is-10-desktop is-full-tablet">
 
-    <h1 class="text-3xl font-bold text-gray-800 mb-6 pb-2 border-b border-gray-300">
-        <?= esc($titulo) ?>
-    </h1>
-
-    <!-- Área de Exibição de Erros de Validação -->
-    <?php if (session()->getFlashdata('erros')): ?>
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-            <strong class="font-bold">Ocorreram erros de validação:</strong>
-            <ul class="mt-2 list-disc list-inside">
-                <?php foreach (session()->getFlashdata('erros') as $erro): ?>
-                    <li><?= esc($erro) ?></li>
-                <?php endforeach; ?>
-            </ul>
+        <div class="block mb-5">
+            <h1 class="title is-3 has-text-grey-darker"><?= esc($titulo) ?></h1>
+            <p class="subtitle is-6 has-text-grey">Preencha os detalhes da movimentação financeira.</p>
         </div>
-    <?php endif; ?>
 
-    <!-- Formulário de Transação -->
-    <div class="bg-white p-8 rounded-xl shadow-lg">
-
-        <!-- O formulário SEMPRE aponta para 'salvar_transacao' -->
-        <?= form_open(route_to('salvar_transacao')) ?>
-
-        <!-- CAMPO OCULTO DE ID (para Edição) -->
-        <?php if ($is_edit): ?>
-            <input type="hidden" name="id" value="<?= esc($transacao['id']) ?>">
+        <?php if (session()->getFlashdata('erros')): ?>
+            <div class="notification is-danger is-light">
+                <button class="delete"></button>
+                <strong>Ocorreram erros de validação:</strong>
+                <ul class="mt-2 ml-4" style="list-style-type: disc;">
+                    <?php foreach (session()->getFlashdata('erros') as $erro): ?>
+                        <li><?= esc($erro) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
         <?php endif; ?>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="box">
 
-            <!-- 1. Tipo de Transação (PAGAR/RECEBER) -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de Transação <span class="text-red-500">*</span></label>
-                <?php $tipo_selecionado = old('tipo', $transacao['tipo'] ?? 'RECEBER'); ?>
-                <div class="flex space-x-4 mt-2">
-                    <label class="inline-flex items-center">
-                        <input type="radio" class="form-radio text-green-600 h-4 w-4" name="tipo" value="RECEBER" <?= ($tipo_selecionado == 'RECEBER') ? 'checked' : '' ?>>
-                        <span class="ml-2 text-gray-700 font-semibold text-green-600">A Receber</span>
-                    </label>
-                    <label class="inline-flex items-center">
-                        <input type="radio" class="form-radio text-red-600 h-4 w-4" name="tipo" value="PAGAR" <?= ($tipo_selecionado == 'PAGAR') ? 'checked' : '' ?>>
-                        <span class="ml-2 text-gray-700 font-semibold text-red-600">A Pagar</span>
-                    </label>
+            <?= form_open(route_to('salvar_transacao')) ?>
+
+            <?php if ($is_edit): ?>
+                <input type="hidden" name="id" value="<?= esc($transacao['id']) ?>">
+            <?php endif; ?>
+
+            <div class="columns is-multiline">
+
+                <div class="column is-half">
+                    <div class="field">
+                        <label class="label">Tipo de Transação <span class="has-text-danger">*</span></label>
+                        <div class="control">
+                            <?php $tipo_selecionado = old('tipo', $transacao['tipo'] ?? 'RECEBER'); ?>
+
+                            <label class="radio mr-4">
+                                <input type="radio" name="tipo" value="RECEBER" <?= ($tipo_selecionado == 'RECEBER') ? 'checked' : '' ?>>
+                                <span class="tag is-success is-light ml-1 font-bold">
+                                    <span class="icon is-small mr-1"><i class="fas fa-arrow-up"></i></span>
+                                    A Receber
+                                </span>
+                            </label>
+
+                            <label class="radio">
+                                <input type="radio" name="tipo" value="PAGAR" <?= ($tipo_selecionado == 'PAGAR') ? 'checked' : '' ?>>
+                                <span class="tag is-danger is-light ml-1 font-bold">
+                                    <span class="icon is-small mr-1"><i class="fas fa-arrow-down"></i></span>
+                                    A Pagar
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column is-half">
+                    <div class="field">
+                        <label class="label" for="valor">Valor (R$) <span class="has-text-danger">*</span></label>
+                        <div class="control has-icons-left">
+                            <input type="text" name="valor" id="valor"
+                                value="<?= old('valor', number_format($transacao['valor'] ?? 0, 2, ',', '.') ?? '') ?>"
+                                class="input" placeholder="Ex: 150,00">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-dollar-sign"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column is-half">
+                    <div class="field">
+                        <label class="label" for="pessoa_id">Pessoa (Cliente/Fornecedor) <span class="has-text-danger">*</span></label>
+                        <div class="control has-icons-left">
+                            <div class="select is-fullwidth">
+                                <select name="pessoa_id" id="pessoa_id">
+                                    <?php $pessoa_selecionada = old('pessoa_id', $transacao['pessoa_id'] ?? ''); ?>
+                                    <option value="">Selecione a Pessoa...</option>
+                                    <?php foreach ($pessoas as $pessoa): ?>
+                                        <option value="<?= esc($pessoa['id']) ?>" <?= ($pessoa_selecionada == $pessoa['id']) ? 'selected' : '' ?>>
+                                            <?= esc($pessoa['nome']) ?> (<?= esc($pessoa['tipo_documento']) ?>)
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-user"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column is-half">
+                    <div class="field">
+                        <label class="label" for="categoria_id">Categoria (Mapeamento DFC) <span class="has-text-danger">*</span></label>
+                        <div class="control has-icons-left">
+                            <div class="select is-fullwidth">
+                                <select name="categoria_id" id="categoria_id">
+                                    <?php $categoria_selecionada = old('categoria_id', $transacao['categoria_id'] ?? ''); ?>
+                                    <option value="">Selecione a Categoria...</option>
+                                    <?php foreach ($categorias as $categoria): ?>
+                                        <option value="<?= esc($categoria['id']) ?>" <?= ($categoria_selecionada == $categoria['id']) ? 'selected' : '' ?>>
+                                            [<?= esc($categoria['tipo_fluxo']) ?>] <?= esc($categoria['nome']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-tags"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column is-full">
+                    <div class="field">
+                        <label class="label" for="data_vencimento">Data de Vencimento <span class="has-text-danger">*</span></label>
+                        <div class="control has-icons-left">
+                            <input type="date" name="data_vencimento" id="data_vencimento"
+                                value="<?= old('data_vencimento', $transacao['data_vencimento'] ?? '') ?>"
+                                class="input">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-calendar-alt"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column is-full">
+                    <div class="field">
+                        <label class="label" for="descricao">Descrição Breve <span class="has-text-danger">*</span></label>
+                        <div class="control has-icons-left">
+                            <input type="text" name="descricao" id="descricao"
+                                value="<?= old('descricao', $transacao['descricao'] ?? '') ?>"
+                                class="input" placeholder="Ex: Consulta Psicológica - Sessão 5">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-align-left"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <hr>
+
+            <div class="field is-grouped is-grouped-right">
+                <div class="control">
+                    <a href="<?= route_to('financeiro_index') ?>" class="button is-light">
+                        Voltar / Cancelar
+                    </a>
+                </div>
+                <div class="control">
+                    <button type="submit" class="button is-link">
+                        <span class="icon is-small">
+                            <i class="fas fa-save"></i>
+                        </span>
+                        <span><?= $is_edit ? 'Atualizar Transação' : 'Registrar Transação' ?></span>
+                    </button>
                 </div>
             </div>
 
-            <!-- 2. Valor -->
-            <div>
-                <label for="valor" class="block text-sm font-medium text-gray-700 mb-1">Valor (R$) <span class="text-red-500">*</span></label>
-                <input type="text" name="valor" id="valor"
-                    value="<?= old('valor', number_format($transacao['valor'] ?? 0, 2, ',', '.') ?? '') ?>"
-                    placeholder="Ex: 150,00"
-                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-            </div>
-
-            <!-- 3. Pessoa (Cliente/Fornecedor) -->
-            <div>
-                <label for="pessoa_id" class="block text-sm font-medium text-gray-700 mb-1">Pessoa (Cliente ou Fornecedor) <span class="text-red-500">*</span></label>
-                <select name="pessoa_id" id="pessoa_id" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                    <?php $pessoa_selecionada = old('pessoa_id', $transacao['pessoa_id'] ?? ''); ?>
-                    <option value="">Selecione a Pessoa...</option>
-                    <?php foreach ($pessoas as $pessoa): ?>
-                        <option value="<?= esc($pessoa['id']) ?>" <?= ($pessoa_selecionada == $pessoa['id']) ? 'selected' : '' ?>>
-
-                            <!-- 
-                                    AQUI ESTÁ A CORREÇÃO:
-                                    Trocamos $pessoa['tipo_pessoa'] por $pessoa['tipo_documento']
-                                -->
-                            <?= esc($pessoa['nome']) ?> (<?= esc($pessoa['tipo_documento']) ?>)
-
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
-            <!-- 4. Categoria (DFC) -->
-            <div>
-                <label for="categoria_id" class="block text-sm font-medium text-gray-700 mb-1">Categoria Financeira (Mapeamento DFC) <span class="text-red-500">*</span></label>
-                <select name="categoria_id" id="categoria_id" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                    <?php $categoria_selecionada = old('categoria_id', $transacao['categoria_id'] ?? ''); ?>
-                    <option value="">Selecione a Categoria...</option>
-                    <?php foreach ($categorias as $categoria): ?>
-                        <option value="<?= esc($categoria['id']) ?>" <?= ($categoria_selecionada == $categoria['id']) ? 'selected' : '' ?>>
-                            [<?= esc($categoria['tipo_fluxo']) ?>] <?= esc($categoria['nome']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
-            <!-- 5. Data de Vencimento -->
-            <div class="md:col-span-2">
-                <label for="data_vencimento" class="block text-sm font-medium text-gray-700 mb-1">Data de Vencimento <span class="text-red-500">*</span></label>
-                <input type="date" name="data_vencimento" id="data_vencimento"
-                    value="<?= old('data_vencimento', $transacao['data_vencimento'] ?? '') ?>"
-                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-            </div>
-
-            <!-- 6. Descrição -->
-            <div class="md:col-span-2">
-                <label for="descricao" class="block text-sm font-medium text-gray-700 mb-1">Descrição Breve <span class="text-red-500">*</span></label>
-                <input type="text" name="descricao" id="descricao"
-                    value="<?= old('descricao', $transacao['descricao'] ?? '') ?>"
-                    placeholder="Ex: Consulta Psicológica - Sessão 5"
-                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-            </div>
+            <?= form_close() ?>
 
         </div>
-
-        <!-- Botões de Ação -->
-        <div class="mt-10 flex justify-end space-x-4 pt-6 border-t border-gray-200">
-            <a href="<?= route_to('financeiro_index') ?>" class="px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg shadow-sm hover:bg-gray-50 transition duration-300">
-                Voltar / Cancelar
-            </a>
-            <button type="submit" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-300">
-                <!-- O texto do botão muda se for edição -->
-                <?= $is_edit ? 'Atualizar Transação' : 'Registrar Transação' ?>
-            </button>
-        </div>
-
-        <?= form_close() ?>
-
     </div>
 </div>
 

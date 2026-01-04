@@ -1,112 +1,153 @@
 <?php
-// Define o layout principal que esta view deve herdar
 $this->extend('layout/principal');
-
-// Define a seção 'titulo'
 $this->section('titulo');
-?>
-<?= esc($titulo) ?>
-<?php $this->endSection(); ?>
+echo esc($titulo);
+$this->endSection();
 
-<?php
-// Define a seção 'conteudo' que será injetada no layout
 $this->section('conteudo');
 ?>
 
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-4xl font-extrabold text-indigo-700 mb-2"><?= esc($titulo) ?></h1>
-    <p class="text-xl text-gray-500 mb-8"><?= esc($subtitulo) ?></p>
+<style>
+    .hover-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        cursor: pointer;
+    }
 
-    <!-- Cards de Módulos de CADASTRO (CRUD) -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+    .hover-card:hover {
+        transform: translateY(-5px);
+        /* Efeito suave de subida */
+        box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+    }
 
-        <!-- Card: Lançamento de Transações -->
-        <!-- CORRIGIDO: Aponta para o formulário de nova transação -->
-        <a href="<?= route_to('nova_transacao') ?>" class="block bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-[1.02]">
-            <div class="flex items-center">
-                <div class="bg-indigo-100 p-3 rounded-full text-indigo-600 mr-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm12 3a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd" />
-                        <path d="M14 10a1 1 0 100-2h-3a1 1 0 000 2h3z" />
-                    </svg>
-                </div>
-                <div>
-                    <h2 class="text-xl font-bold text-gray-800">Lançamento de Transações</h2>
-                    <p class="text-sm text-gray-500 mt-1">Contas a Pagar e Receber (PENDENTES).</p>
-                </div>
+    .border-l-success {
+        border-left: 5px solid #48c774;
+    }
+
+    .border-l-warning {
+        border-left: 5px solid #ffdd57;
+    }
+</style>
+
+<section class="section">
+    <div class="container">
+
+        <div class="block mb-6">
+            <h1 class="title is-2 has-text-link-dark"><?= esc($titulo) ?></h1>
+            <p class="subtitle is-4 has-text-grey"><?= esc($subtitulo) ?></p>
+        </div>
+
+        <div class="columns is-multiline is-variable is-6 mb-6">
+
+            <div class="column is-one-third-desktop is-half-tablet">
+                <a href="<?= route_to('nova_transacao') ?>">
+                    <div class="box hover-card">
+                        <article class="media is-align-items-center">
+                            <figure class="media-left">
+                                <span class="icon is-large has-text-link has-background-link-light" style="border-radius: 50%; width: 64px; height: 64px;">
+                                    <i class="fas fa-file-invoice-dollar fa-2x"></i>
+                                </span>
+                            </figure>
+                            <div class="media-content">
+                                <div class="content">
+                                    <p class="title is-5 has-text-grey-darker mb-1">Lançamento</p>
+                                    <p class="subtitle is-6 has-text-grey">Contas a Pagar e Receber</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </a>
             </div>
-        </a>
 
-        <!-- Card: Pessoas (Clientes, Fornecedores, Sócios) -->
-        <a href="<?= route_to('pessoas_index') ?>" class="block bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-[1.02]">
-            <div class="flex items-center">
-                <div class="bg-blue-100 p-3 rounded-full text-blue-600 mr-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-                <div>
-                    <h2 class="text-xl font-bold text-gray-800">Cadastro de Pessoas</h2>
-                    <p class="text-sm text-gray-500 mt-1">Clientes, Fornecedores e Sócios.</p>
-                </div>
+            <div class="column is-one-third-desktop is-half-tablet">
+                <a href="<?= route_to('pessoas_index') ?>">
+                    <div class="box hover-card">
+                        <article class="media is-align-items-center">
+                            <figure class="media-left">
+                                <span class="icon is-large has-text-info has-background-info-light" style="border-radius: 50%; width: 64px; height: 64px;">
+                                    <i class="fas fa-users fa-2x"></i>
+                                </span>
+                            </figure>
+                            <div class="media-content">
+                                <div class="content">
+                                    <p class="title is-5 has-text-grey-darker mb-1">Pessoas</p>
+                                    <p class="subtitle is-6 has-text-grey">Clientes e Fornecedores</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </a>
             </div>
-        </a>
 
-        <!-- Card: Categorias Financeiras (DFC) -->
-        <a href="<?= route_to('categorias_index') ?>" class="block bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-[1.02]">
-            <div class="flex items-center">
-                <div class="bg-teal-100 p-3 rounded-full text-teal-600 mr-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v5.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V7z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-                <div>
-                    <h2 class="text-xl font-bold text-gray-800">Mapeamento DFC</h2>
-                    <p class="text-sm text-gray-500 mt-1">FCO, FCI e FCF (Plano de Contas).</p>
-                </div>
+            <div class="column is-one-third-desktop is-half-tablet">
+                <a href="<?= route_to('categorias_index') ?>">
+                    <div class="box hover-card">
+                        <article class="media is-align-items-center">
+                            <figure class="media-left">
+                                <span class="icon is-large has-text-primary has-background-primary-light" style="border-radius: 50%; width: 64px; height: 64px;">
+                                    <i class="fas fa-tags fa-2x"></i>
+                                </span>
+                            </figure>
+                            <div class="media-content">
+                                <div class="content">
+                                    <p class="title is-5 has-text-grey-darker mb-1">Mapeamento</p>
+                                    <p class="subtitle is-6 has-text-grey">Plano de Contas DFC</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </a>
             </div>
-        </a>
+        </div>
+
+        <h2 class="title is-3 has-text-grey-darker mt-6 mb-4 pb-2" style="border-bottom: 1px solid #dbdbdb;">
+            Relatórios e Fluxo de Caixa
+        </h2>
+
+        <div class="columns is-multiline is-variable is-6">
+
+            <div class="column is-half-desktop">
+                <a href="<?= route_to('relatorio_dfc') ?>">
+                    <div class="box hover-card border-l-success">
+                        <article class="media is-align-items-center">
+                            <figure class="media-left">
+                                <span class="icon is-large has-text-success has-background-success-light" style="border-radius: 50%; width: 64px; height: 64px;">
+                                    <i class="fas fa-chart-line fa-2x"></i>
+                                </span>
+                            </figure>
+                            <div class="media-content">
+                                <div class="content">
+                                    <p class="title is-5 has-text-grey-darker mb-1">Demonstração DFC</p>
+                                    <p class="subtitle is-6 has-text-grey">Análise consolidada (FCO, FCI, FCF).</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </a>
+            </div>
+
+            <div class="column is-half-desktop">
+                <a href="<?= route_to('financeiro_index') ?>">
+                    <div class="box hover-card border-l-warning">
+                        <article class="media is-align-items-center">
+                            <figure class="media-left">
+                                <span class="icon is-large has-text-warning has-background-warning-light" style="border-radius: 50%; width: 64px; height: 64px;">
+                                    <i class="fas fa-clock fa-2x"></i>
+                                </span>
+                            </figure>
+                            <div class="media-content">
+                                <div class="content">
+                                    <p class="title is-5 has-text-grey-darker mb-1">Contas Pendentes</p>
+                                    <p class="subtitle is-6 has-text-grey">Itens a receber ou pagar.</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </a>
+            </div>
+
+        </div>
     </div>
-
-    <!-- Seção de Relatórios e Analíticos (DFC) -->
-    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4 border-b pb-2">Relatórios e Fluxo de Caixa</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-
-        <!-- Card: Relatório DFC -->
-        <!-- CORRIGIDO: Aponta para o relatório DFC -->
-        <a href="<?= route_to('relatorio_dfc') ?>" class="block bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-[1.02] border-l-4 border-green-500">
-            <div class="flex items-center">
-                <div class="bg-green-100 p-3 rounded-full text-green-600 mr-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-                    </svg>
-                </div>
-                <div>
-                    <h2 class="text-xl font-bold text-gray-800">Demonstração dos Fluxos de Caixa (DFC)</h2>
-                    <p class="text-sm text-gray-500 mt-1">Análise consolidada (FCO, FCI, FCF).</p>
-                </div>
-            </div>
-        </a>
-
-        <!-- Card: Contas Pendentes (Dashboard Operacional) -->
-        <!-- CORRIGIDO: Aponta para o index do financeiro (listagem de pendentes) -->
-        <a href="<?= route_to('financeiro_index') ?>" class="block bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-[1.02] border-l-4 border-yellow-500">
-            <div class="flex items-center">
-                <div class="bg-yellow-100 p-3 rounded-full text-yellow-600 mr-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h.01a1 1 0 100-2H10zm3 0a1 1 0 000 2h.01a1 1 0 100-2H13z" clip-rule="evenodd" />
-                        <path d="M8 12a1 1 0 100 2h.01a1 1 0 100-2H8zm3 0a1 1 0 100 2h.01a1 1 0 100-2H11zm3 0a1 1 0 100 2h.01a1 1 0 100-2H14z" />
-                    </svg>
-                </div>
-                <div>
-                    <h2 class="text-xl font-bold text-gray-800">Contas Pendentes</h2>
-                    <p class="text-sm text-gray-500 mt-1">Itens a receber ou pagar (Regime de Competência).</p>
-                </div>
-            </div>
-        </a>
-
-    </div>
-</div>
+</section>
 
 <?php $this->endSection(); ?>

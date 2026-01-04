@@ -4,8 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
-// Usando o nome correto do Model que você mencionou anteriormente (TransacaoModel)
-// Se o seu Model for realmente RelatorioTransacaoModel, mude a linha abaixo.
+// Importação correta do Model
 use App\Models\TransacaoModel;
 use CodeIgniter\Controller;
 
@@ -27,7 +26,7 @@ class RelatorioTransacaoController extends Controller
      */
     public function index()
     {
-        // ATENÇÃO: Verifique se o Model correto é TransacaoModel ou RelatorioTransacaoModel
+        // ATENÇÃO: Se o seu Model for RelatorioTransacaoModel, mude o nome aqui.
         $model = new TransacaoModel();
         $request = $this->request;
 
@@ -40,13 +39,17 @@ class RelatorioTransacaoController extends Controller
         // 2. Busca dos dados
         $dadosTransacoes = $model->getRelatorio($dataInicio, $dataFim);
 
+        // NOVO: Busca o saldo acumulado (Entradas - Saídas) até a data de início do período.
+        $saldoInicial = $model->getSaldoInicial($dataInicio);
+
         // 3. Preparação dos dados para a View
         $data = [
-            'data_inicio' => $dataInicio,
-            'data_fim'    => $dataFim,
-            'transacoes'  => $dadosTransacoes,
-            'title'       => 'Relatório de Transações Financeiras',
-            'periodo_txt' => date('d/m/Y', strtotime($dataInicio)) . ' a ' . date('d/m/Y', strtotime($dataFim)),
+            'data_inicio'   => $dataInicio,
+            'data_fim'      => $dataFim,
+            'transacoes'    => $dadosTransacoes,
+            'saldo_inicial' => $saldoInicial, // VARIÁVEL CRUCIAL PARA A CORREÇÃO
+            'title'         => 'Relatório de Transações Financeiras',
+            'periodo_txt'   => date('d/m/Y', strtotime($dataInicio)) . ' a ' . date('d/m/Y', strtotime($dataFim)),
         ];
 
         // Se sua view está em 'app/Views/relatorio_transacoes.php', o caminho está correto.
@@ -58,7 +61,7 @@ class RelatorioTransacaoController extends Controller
      */
     public function exportarCsv()
     {
-        // ATENÇÃO: Verifique se o Model correto é TransacaoModel ou RelatorioTransacaoModel
+        // ATENÇÃO: Se o seu Model for RelatorioTransacaoModel, mude o nome aqui.
         $model = new TransacaoModel();
         $request = $this->request;
 
@@ -69,7 +72,6 @@ class RelatorioTransacaoController extends Controller
         $dataFim    = $request->getVar('data_fim') ?? $ultimoDia;
 
         // 2. Busca dos dados
-        // Presume que getRelatorio está no Model e retorna o campo 'tipo_fluxo_categoria'
         $dados = $model->getRelatorio($dataInicio, $dataFim);
 
         if (empty($dados)) {
@@ -89,7 +91,7 @@ class RelatorioTransacaoController extends Controller
         // Adiciona a BOM para garantir a compatibilidade de caracteres especiais no Excel
         fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
-        // Títulos das colunas - ALTERADO: 'Pessoa' foi substituído
+        // Títulos das colunas
         $headers = [
             'ID',
             'Tipo',
@@ -99,7 +101,7 @@ class RelatorioTransacaoController extends Controller
             'Status',
             'Descrição',
             'Categoria',
-            'Tipo de Fluxo da Categoria', // NOVO CABEÇALHO
+            'Tipo de Fluxo da Categoria',
             'Criado Em',
             'Atualizado Em'
         ];
@@ -116,7 +118,7 @@ class RelatorioTransacaoController extends Controller
                 $row['status'],
                 $row['descricao'],
                 $row['categoria_nome'] ?? 'N/A',
-                $row['tipo_fluxo_categoria'] ?? 'N/A', // NOVO CAMPO DE DADOS
+                $row['tipo_fluxo_categoria'] ?? 'N/A',
                 date('d/m/Y H:i:s', strtotime($row['created_at'])),
                 date('d/m/Y H:i:s', strtotime($row['updated_at'])),
             ];

@@ -1,155 +1,283 @@
-<?php
-$this->extend('layout/principal');
-$this->section('conteudo');
+<?= $this->extend('layout/principal'); ?>
+<?= $this->section('conteudo'); ?>
 
-// --- LÓGICA DE ORDENAÇÃO ---
+<?php
+// --- LÓGICA DE ORDENAÇÃO E URL ---
 $currentOrdem   = isset($ordem) ? $ordem : 'id';
 $currentDirecao = isset($direcao) ? $direcao : 'asc';
 
 $proximaDirId   = ($currentOrdem === 'id' && $currentDirecao === 'asc') ? 'desc' : 'asc';
 $proximaDirNome = ($currentOrdem === 'nome' && $currentDirecao === 'asc') ? 'desc' : 'asc';
 
-// Mantemos os parâmetros na URL
+// Links para ordenação
 $linkId   = site_url("pessoas?ordem=id&direcao={$proximaDirId}");
 $linkNome = site_url("pessoas?ordem=nome&direcao={$proximaDirNome}");
 
-// Ícones de Ordenação
-$setaCima   = '<span class="text-indigo-600 ml-1">▲</span>';
-$setaBaixo  = '<span class="text-indigo-600 ml-1">▼</span>';
-$setaNeutra = '<span class="text-gray-300 ml-1 opacity-50">⇅</span>';
+// Helper para definir o ícone correto do Font Awesome
+function getIconeOrdenacao($colunaAtual, $colunaAlvo, $direcao)
+{
+    if ($colunaAtual !== $colunaAlvo) {
+        return '<i class="fas fa-sort has-text-grey-light ml-1"></i>'; // Neutro
+    }
+    return ($direcao === 'asc')
+        ? '<i class="fas fa-sort-up has-text-link ml-1"></i>'
+        : '<i class="fas fa-sort-down has-text-link ml-1"></i>';
+}
 
-$iconeId = ($currentOrdem === 'id') ? (($currentDirecao === 'asc') ? $setaCima : $setaBaixo) : $setaNeutra;
-$iconeNome = ($currentOrdem === 'nome') ? (($currentDirecao === 'asc') ? $setaCima : $setaBaixo) : $setaNeutra;
+$iconeId   = getIconeOrdenacao($currentOrdem, 'id', $currentDirecao);
+$iconeNome = getIconeOrdenacao($currentOrdem, 'nome', $currentDirecao);
+
+// Informações de paginação
+$currentPage = $pager->getCurrentPage();
+$totalPages = $pager->getPageCount();
+$totalRecords = $pager->getTotal();
+
+// Função para gerar paginação personalizada com Bulma
+function paginacaoBulma($pager, $currentOrdem, $currentDirecao)
+{
+    $html = '<nav class="pagination is-centered" role="navigation" aria-label="pagination">';
+
+    // Botão anterior
+    $previousURI = $pager->getPreviousPageURI();
+    if ($previousURI) {
+        $previousURI = adicionarOrdenacaoURI($previousURI, $currentOrdem, $currentDirecao);
+        $html .= '<a href="' . $previousURI . '" class="pagination-previous">Anterior</a>';
+    } else {
+        $html .= '<a class="pagination-previous" disabled>Anterior</a>';
+    }
+
+    // Botão próximo
+    $nextURI = $pager->getNextPageURI();
+    if ($nextURI) {
+        $nextURI = adicionarOrdenacaoURI($nextURI, $currentOrdem, $currentDirecao);
+        $html .= '<a href="' . $nextURI . '" class="pagination-next">Próxima</a>';
+    } else {
+        $html .= '<a class="pagination-next" disabled>Próxima</a>';
+    }
+
+    $html .= '<ul class="pagination-list">';
+
+    // Links de página
+    $links = $pager->links();
+    if (is_string($links)) {
+        // Se for string, extraímos os links
+        preg_match_all('/<a[^>]*href=["\']([^"\']*)["\'][^>]*>([^<]*)<\/a>/', $links, $matches, PREG_SET_ORDER);
+
+        foreach ($matches as $match) {
+            $href = $match[1];
+            $text = $match[2];
+            $href = adicionarOrdenacaoURI($href, $currentOrdem, $currentDirecao);
+
+            $isCurrent = (strpos($match[0], 'active') !== false);
+            $class = $isCurrent ? 'pagination-link is-current' : 'pagination-link';
+
+            $html .= '<li><a href="' . $href . '" class="' . $class . '" aria-label="Página ' . $text . '">' . $text . '</a></li>';
+        }
+    }
+
+    $html .= '</ul>';
+    $html .= '</nav>';
+
+    return $html;
+}
+
+// Função para adicionar parâmetros de ordenação aos URIs de paginação
+function adicionarOrdenacaoURI($uri, $ordem, $direcao)
+{
+    if (empty($ordem) || empty($direcao)) {
+        return $uri;
+    }
+
+    // Verificar se a URI já tem parâmetros de query
+    if (strpos($uri, '?') === false) {
+        $uri .= '?';
+    } else {
+        $uri .= '&';
+    }
+
+    $uri .= 'ordem=' . urlencode($ordem) . '&direcao=' . urlencode($direcao);
+    return $uri;
+}
 ?>
 
-<div class="container mx-auto px-4 py-8">
+<div class="container">
 
-    <div class="flex justify-between items-center mb-6 pb-2 border-b border-gray-300">
-        <h1 class="text-3xl font-bold text-gray-800">
-            <?= esc($titulo ?? 'Lista de Pessoas') ?>
-        </h1>
-
-        <a href="<?= site_url('pessoas/nova') ?>" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-            </svg>
-            Nova Pessoa
-        </a>
+    <div class="level mb-5">
+        <div class="level-left">
+            <div>
+                <h1 class="title is-3 has-text-grey-darker mb-2">
+                    <?= esc($titulo ?? 'Lista de Pessoas') ?>
+                </h1>
+                <p class="subtitle is-6 has-text-grey">Gerencie seus clientes e fornecedores</p>
+            </div>
+        </div>
+        <div class="level-right">
+            <a href="<?= site_url('pessoas/nova') ?>" class="button is-link">
+                <span class="icon">
+                    <i class="fas fa-plus"></i>
+                </span>
+                <span>Nova Pessoa</span>
+            </a>
+        </div>
     </div>
 
     <?php if (session()->getFlashdata('sucesso')): ?>
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+        <div class="notification is-success is-light">
+            <button class="delete"></button>
             <?= session()->getFlashdata('sucesso') ?>
         </div>
     <?php endif; ?>
 
     <?php if (session()->getFlashdata('erro')): ?>
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+        <div class="notification is-danger is-light">
+            <button class="delete"></button>
             <?= session()->getFlashdata('erro') ?>
         </div>
     <?php endif; ?>
 
-    <div class="bg-white rounded-xl shadow-lg overflow-x-auto mb-6">
-
+    <div class="box">
         <?php if (empty($pessoas)): ?>
-            <div class="p-6 text-center text-gray-500">
-                Nenhuma pessoa cadastrada ainda.
+
+            <div class="has-text-centered py-6">
+                <span class="icon is-large has-text-grey-light mb-3">
+                    <i class="fas fa-users-slash fa-3x"></i>
+                </span>
+                <p class="is-size-5 has-text-grey">Nenhuma pessoa cadastrada ainda.</p>
             </div>
+
         <?php else: ?>
 
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
-                            <a href="<?= $linkId ?>" class="block w-full h-full select-none" title="Ordenar por ID">
-                                ID <?= $iconeId ?>
-                            </a>
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
-                            <a href="<?= $linkNome ?>" class="block w-full h-full select-none" title="Ordenar por Nome">
-                                NOME <?= $iconeNome ?>
-                            </a>
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Documento</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">E-mail</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <?php foreach ($pessoas as $pessoa): ?>
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                <?= esc($pessoa['id']) ?>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium">
-                                <?= esc($pessoa['nome']) ?>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                <span class="text-xs font-bold text-gray-500 mr-1"><?= esc($pessoa['tipo_documento']) ?>:</span>
-                                <?= esc($pessoa['documento']) ?>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                <?= esc($pessoa['email']) ?>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
-
-                                <a href="<?= site_url('pessoas/editar/' . $pessoa['id']) ?>" class="text-indigo-600 hover:text-indigo-900 inline-block transition-colors" title="Editar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
+            <div class="table-container">
+                <table class="table is-fullwidth is-striped is-hoverable is-vcentered">
+                    <thead>
+                        <tr>
+                            <th>
+                                <a href="<?= $linkId ?>" class="has-text-grey-darker is-flex is-align-items-center" title="Ordenar por ID">
+                                    ID <?= $iconeId ?>
                                 </a>
-
-                                <form action="<?= site_url('pessoas/excluir/' . $pessoa['id']) ?>" method="post" class="inline-block" onsubmit="return confirm('Tem certeza que deseja excluir?');">
-                                    <?= csrf_field() ?>
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <button type="submit" class="text-red-600 hover:text-red-900 transition-colors" title="Excluir">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                    </button>
-                                </form>
-                            </td>
+                            </th>
+                            <th>
+                                <a href="<?= $linkNome ?>" class="has-text-grey-darker is-flex is-align-items-center" title="Ordenar por Nome">
+                                    NOME <?= $iconeNome ?>
+                                </a>
+                            </th>
+                            <th>Documento</th>
+                            <th>E-mail</th>
+                            <th class="has-text-right">Ações</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($pessoas as $pessoa): ?>
+                            <tr>
+                                <td class="has-text-grey"><?= esc($pessoa['id']) ?></td>
+                                <td class="has-text-weight-medium text-dark">
+                                    <?= esc($pessoa['nome']) ?>
+                                    <?php if (isset($pessoa['tipo_pessoa'])): ?>
+                                        <span class="tag is-white is-small text-gray-500 border ml-2">
+                                            <?= esc($pessoa['tipo_pessoa']) ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <span class="tag is-light is-small has-text-weight-bold mr-1">
+                                        <?= esc($pessoa['tipo_documento']) ?>
+                                    </span>
+                                    <span class="is-family-monospace"><?= esc($pessoa['documento']) ?></span>
+                                </td>
+                                <td><?= esc($pessoa['email']) ?></td>
+                                <td class="has-text-right">
+                                    <div class="buttons is-right are-small">
+
+                                        <a href="<?= site_url('pessoas/editar/' . $pessoa['id']) ?>" class="button is-info is-outlined" title="Editar">
+                                            <span class="icon">
+                                                <i class="fas fa-edit"></i>
+                                            </span>
+                                        </a>
+
+                                        <form action="<?= site_url('pessoas/excluir/' . $pessoa['id']) ?>" method="post" class="is-inline js-form-delete">
+                                            <?= csrf_field() ?>
+                                            <input type="hidden" name="_method" value="DELETE">
+
+                                            <button type="submit" class="button is-danger is-outlined" title="Excluir">
+                                                <span class="icon">
+                                                    <i class="fas fa-trash"></i>
+                                                </span>
+                                            </button>
+                                        </form>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
 
         <?php endif; ?>
     </div>
 
-    <div class="flex justify-center mt-4">
-        <?= $pager->links('default', 'default_full') ?>
-    </div>
+    <?php if (!empty($pessoas) && $pager->getPageCount() > 1): ?>
+        <div class="section pt-0">
+            <div class="level">
+                <div class="level-left">
+                    <div class="level-item">
+                        <div class="has-text-grey">
+                            <span class="icon is-small">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
+                            <span class="ml-1">
+                                Mostrando <?= $pager->getPerPage() ?> de <?= $totalRecords ?> registros
+                                (Página <?= $currentPage ?> de <?= $totalPages ?>)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <style>
-        .pagination {
-            display: flex;
-            list-style: none;
-            gap: 0.5rem;
-        }
-
-        .pagination li a,
-        .pagination li span {
-            padding: 0.5rem 1rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.375rem;
-            color: #4b5563;
-            background-color: white;
-            text-decoration: none;
-        }
-
-        .pagination li.active a,
-        .pagination li.active span {
-            background-color: #4f46e5;
-            /* Indigo-600 */
-            color: white;
-            border-color: #4f46e5;
-        }
-
-        .pagination li a:hover {
-            background-color: #f3f4f6;
-        }
-    </style>
+            <!-- Paginação estilizada com Bulma -->
+            <div class="mt-4">
+                <?php echo paginacaoBulma($pager, $currentOrdem, $currentDirecao); ?>
+            </div>
+        </div>
+    <?php endif; ?>
 
 </div>
+
+<?php $this->endSection(); ?>
+
+<?php $this->section('scripts'); ?>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Botões de fechar notificações
+        document.querySelectorAll('.notification .delete').forEach(function(button) {
+            button.addEventListener('click', function() {
+                this.parentElement.style.display = 'none';
+            });
+        });
+
+        // Confirmação para exclusão
+        document.querySelectorAll('.js-form-delete').forEach(function(form) {
+            form.addEventListener('submit', function(e) {
+                if (!confirm('Tem certeza que deseja excluir esta pessoa?')) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Adicionar ícones aos botões de paginação
+        const pagination = document.querySelector('.pagination');
+        if (pagination) {
+            const previousBtn = pagination.querySelector('.pagination-previous:not([disabled])');
+            const nextBtn = pagination.querySelector('.pagination-next:not([disabled])');
+
+            if (previousBtn) {
+                previousBtn.innerHTML = '<span class="icon"><i class="fas fa-chevron-left"></i></span><span>Anterior</span>';
+            }
+
+            if (nextBtn) {
+                nextBtn.innerHTML = '<span>Próxima</span><span class="icon"><i class="fas fa-chevron-right"></i></span>';
+            }
+        }
+    });
+</script>
 <?php $this->endSection(); ?>

@@ -10,45 +10,6 @@ class PessoasController extends Controller
     // Carrega o Form Helper e o URL Helper
     protected $helpers = ['form', 'url'];
 
-    /**
-     * Rota: /pessoas
-     * Lista todas as pessoas (COM ORDENAÇÃO)
-     */
-    // public function index()
-    // {
-    //     $model = new PessoaModel();
-
-    //     // 1. Captura os parâmetros de ordenação da URL (GET)
-    //     // Se não existirem, define o padrão: ordenar por 'id' de forma 'asc' (crescente)
-    //     $ordem   = $this->request->getGet('ordem') ?? 'id';
-    //     $direcao = $this->request->getGet('direcao') ?? 'asc';
-
-    //     // 2. Validação de Segurança (Whitelist)
-    //     // Isso impede que alguém digite "?ordem=senha" ou injeção de SQL na URL
-    //     $colunasPermitidas = ['id', 'nome', 'email', 'documento'];
-
-    //     if (!in_array($ordem, $colunasPermitidas)) {
-    //         $ordem = 'id'; // Se a coluna for inválida, volta para o padrão
-    //     }
-
-    //     // Garante que a direção seja apenas 'asc' ou 'desc'
-    //     $direcao = (strtolower($direcao) === 'desc') ? 'desc' : 'asc';
-
-    //     // 3. Busca os dados ordenados
-    //     $data = [
-    //         'titulo'  => 'Listagem de Pessoas Cadastradas',
-    //         // Aplica o orderBy antes do findAll
-    //         'pessoas' => $model->orderBy($ordem, $direcao)->findAll(),
-
-    //         // 4. Passa as variáveis de controle para a View (para as setinhas funcionarem)
-    //         'ordem'   => $ordem,
-    //         'direcao' => $direcao,
-    //     ];
-
-    //     return view('pessoas/index', $data);
-    // }
-
-
     public function index()
     {
         $model = new PessoaModel();
@@ -58,7 +19,7 @@ class PessoasController extends Controller
         $direcao = $this->request->getGet('direcao') ?? 'asc';
 
         // 2. Whitelist de segurança
-        $colunasPermitidas = ['id', 'nome', 'email', 'documento'];
+        $colunasPermitidas = ['id', 'nome', 'cliente', 'email', 'documento'];
         if (!in_array($ordem, $colunasPermitidas)) {
             $ordem = 'id';
         }

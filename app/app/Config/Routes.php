@@ -74,7 +74,7 @@ $routes->group('financeiro', function ($routes) {
     $routes->post('liquidar/(:num)', 'FinanceiroController::liquidarCaixa/$1', ['as' => 'liquidar_caixa']);
 
     // Relatório DFC
-    $routes->match(['get', 'post'], 'financeiro/dfc', 'FinanceiroController::relatorioDFC', ['as' => 'relatorio_dfc']);
+    $routes->match(['get', 'post'], 'financeiro/dfc', 'RelatorioDfcController::index', ['as' => 'relatorio_dfc']);
     // $routes->match(['get', 'post'], 'relatorio_dfc', 'FinanceiroController::relatorioDFC', ['as' => 'relatorio_dfc']);
     # $routes->match(['get', 'post'], 'relatorio_dfc', 'FinanceiroController::relatorioDFC', ['as' => 'relatorio_dfc']);
 });
@@ -85,6 +85,30 @@ $routes->get('relatorio/exportarCsv', 'RelatorioTransacaoController::exportarCsv
 $routes->get('teste', function () {
     echo 'Rota funcionando!';
 });
+
+// $routes->get('relatorio/transacoes', 'RelatorioTipoClienteController::index');
+// $routes->get('relatorio/exportar', 'RelatorioTipoClienteController::exportar');
+
+
+// // app/Config/Routes.php
+// $routes->get('relatorio/tipocliente', 'RelatorioTipoClienteController::index');
+// $routes->get('relatorio/tipocliente/exportar', 'RelatorioTipoClienteController::exportar');
+// $routes->get('relatorio/debug', 'RelatorioTipoClienteController::debugCompleto');
+// $routes->get('relatorio/testar-colunas', 'RelatorioTipoClienteController::testarColunas');
+
+// // Rotas principais
+// $routes->get('relatorio/tipocliente', 'RelatorioTipoClienteController::index');
+// $routes->get('relatorio/tipocliente/exportar', 'RelatorioTipoClienteController::exportar');
+
+// // Rotas para testes
+// $routes->get('relatorio/debug', 'RelatorioTipoClienteController::index', ['filter' => '?debug=1']);
+// $routes->get('relatorio/testar-coluna/(:any)', 'RelatorioTipoClienteController::testarColuna/$1');
+
+
+// Rotas para o relatório
+$routes->get('relatorio/tipocliente', 'RelatorioTipoClienteController::index');
+$routes->get('relatorio/tipocliente/exportar', 'RelatorioTipoClienteController::exportar');
+$routes->get('relatorio/tipocliente/teste', 'RelatorioTipoClienteController::teste');
 
 /*
  * --------------------------------------------------------------------

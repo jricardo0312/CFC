@@ -1,0 +1,31 @@
+/* Estilos para paginação Bulma */
+.pagination {
+    margin-bottom: 0;
+}
+
+.pagination-previous .icon,
+.pagination-next .icon {
+    font-size: 0.75rem;
+}
+
+.pagination-previous[disabled],
+.pagination-next[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-link.is-current {
+    background-color: #3273dc;
+    border-color: #3273dc;
+    color: white;
+}
+
+.pagination-link:hover:not(.is-current) {
+    background-color: #f5f5f5;
+    border-color: #dbdbdb;
+}
+
+.pagination-ellipsis {
+    color: #b5b5b5;
+    pointer-events: none;
+}

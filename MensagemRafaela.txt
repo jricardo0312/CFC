@@ -1,0 +1,23 @@
+Boa noite Rafaela,
+Concluí a versão beta do sistema de Controle de Fluxo de Caixa. Foi inserido no sistema a movimentação do primeiro trimestre de 2025, foram incluídos: despesas, recebimentos de terapeutas e pacientes, despedsas com manutenção, etc. Foi criado um login e senha para que possa conhecer e avaliar as funcionalidades. Ficarei imensamente feliz se você apontar as falhas, pontos a melhora, instrumentos a serem desenvolvidos.
+
+O sistema pode ser acessado em: https://cfc.salutempsi.com.br/
+login: Bittencourt-rafa4@hotmail.com 
+senha: salutem86
+
+💰 Sistema DFC para a Salutem Terapias Integradas LTDA.
+
+Este é o projeto do sistema de gestão financeira focado na Demonstração dos Fluxos de Caixa (DFC) pelo Método Direto, desenvolvido em CodeIgniter 4. O objetivo é fornecer à clínica uma visão clara e contábil de suas movimentações de caixa, separando as atividades em Operacionais (FCO), de Investimento (FCI) e de Financiamento (FCF).
+
+🚀 Conceito Principal: DFC e Regimes Financeiros: O sistema opera em dois regimes para garantir a precisão contábil: 
+- Regime de Competência (Contas - Pendentes): Registra receitas e despesas quando são contratadas (no lançamento, com status PENDENTE). 
+- Regime de Caixa (DFC): O relatório final só considera transações que foram Liquidadas (ou seja, quando o dinheiro efetivamente entrou ou saiu da conta). 
+- A liquidação registra a data_caixa, que é a base para o cálculo da DFC.
+
+Classificações DFC (O Coração do Sistema)
+
+Todas as transações são mapeadas para um dos três tipos de fluxo:
+
+- FCO Fluxo de Caixa Operacional. Atividades principais do negócio. Receita de Consultas, Pagamento de Aluguel, Salários.
+- FCI Fluxo de Caixa de Investimento. Compra/Venda de Ativos de Longo Prazo. Compra de Mobiliário, Aquisição de Softwares.
+- FCF Fluxo de Caixa de Financiamento. Alterações na estrutura de capital e dívidas. Empréstimos, Aporte de Capital, Distribuição de Lucros.

@@ -6,318 +6,210 @@ $this->extend('layout/principal');
 $this->section('conteudo');
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-br">
+<style>
+    @media print {
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= esc($title) ?></title>
-    <!-- Estilos básicos para o relatório -->
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
+        /* Esconde elementos de navegação do site que não queremos no papel */
+        .navbar,
+        .hero,
+        .footer,
+        .buttons,
+        .notification,
+        form {
+            display: none !important;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        /* Ajustes da tabela para caber na folha */
+        .table {
+            font-size: 8pt !important;
+            width: 100% !important;
         }
 
-        h1 {
-            color: #007bff;
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            text-align: center;
+        /* Remove sombras e bordas do container principal */
+        .box {
+            box-shadow: none !important;
+            border: none !important;
         }
 
-        .form-panel {
-            background: #e9ecef;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            align-items: flex-end;
+        /* Otimização de margens */
+        .section {
+            padding: 0 !important;
         }
 
-        .form-group {
-            flex: 1 1 200px;
-            min-width: 180px;
+        /* Ajuste para quebrar texto longo */
+        td {
+            word-wrap: break-word !important;
         }
+    }
+</style>
 
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
+<div class="columns is-centered">
+    <div class="column is-12-widescreen">
 
-        .form-group input,
-        .btn {
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .btn-group {
-            flex: 1 1 100%;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .btn {
-            cursor: pointer;
-            transition: background-color 0.3s;
-            width: auto;
-            min-width: 100px;
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            color: white;
-            border-color: #007bff;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-success {
-            background-color: #28a745;
-            color: white;
-            border-color: #28a745;
-        }
-
-        .btn-success:hover {
-            background-color: #1e7e34;
-        }
-
-        .btn-info {
-            background-color: #17a2b8;
-            color: white;
-            border-color: #17a2b8;
-        }
-
-        .btn-info:hover {
-            background-color: #117a8b;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-            margin-top: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            background: white;
-        }
-
-        table th,
-        table td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-            font-size: 14px;
-        }
-
-        table th {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .total-row td {
-            font-weight: bold;
-            background-color: #e9ecef;
-        }
-
-        .badge-entrada {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-
-        .badge-saida {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-
-        /* Estilos específicos para impressão */
-        @media print {
-            body {
-                background-color: white;
-            }
-
-            .container {
-                box-shadow: none;
-                margin: 0;
-                padding: 0;
-            }
-
-            .form-panel,
-            .btn-group,
-            .actions-row {
-                display: none;
-            }
-
-            table {
-                border: 1px solid #000;
-            }
-
-            table th,
-            table td {
-                border: 1px solid #000;
-            }
-
-            h1 {
-                color: #000;
-                border-bottom: 1px solid #000;
-            }
-
-            .print-header {
-                display: block;
-                text-align: center;
-                margin-bottom: 20px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="container">
-        <h1><?= esc($title) ?></h1>
-
-        <!-- Painel de Filtro de Período -->
-        <?= form_open(site_url('relatorio'), ['method' => 'get', 'class' => 'form-panel']) ?>
-        <div class="form-group">
-            <label for="data_inicio">Data de Início (Caixa):</label>
-            <input type="date" id="data_inicio" name="data_inicio" value="<?= esc($data_inicio) ?>" required>
+        <div class="block mb-6 has-text-centered">
+            <h1 class="title is-3 has-text-link-dark is-uppercase" style="border-bottom: 4px solid #3273dc; display: inline-block; padding-bottom: 10px;">
+                <span>Relatório por Cliente</span>
+            </h1>
         </div>
 
-        <div class="form-group">
-            <label for="data_fim">Data de Fim (Caixa):</label>
-            <input type="date" id="data_fim" name="data_fim" value="<?= esc($data_fim) ?>" required>
-        </div>
+        <div class="box is-hidden-print has-background-white-ter">
+            <?= form_open(site_url('relatorio'), ['method' => 'get']) ?>
 
-        <div class="form-group" style="flex: 0 1 auto;">
-            <button type="submit" class="btn btn-primary">Filtrar</button>
-        </div>
-        <?= form_close() ?>
+            <div class="columns is-align-items-end">
 
-        <!-- Linha de Ações (Impressão e Exportação) -->
-        <div class="btn-group actions-row">
-            <button onclick="window.print()" class="btn btn-info">Imprimir</button>
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Data Início (Caixa)</label>
+                        <div class="control has-icons-left">
+                            <input type="date" name="data_inicio" value="<?= esc($data_inicio) ?>" required class="input">
+                            <span class="icon is-small is-left"><i class="fas fa-calendar-alt"></i></span>
+                        </div>
+                    </div>
+                </div>
 
-            <!-- Formulário para Exportação CSV (usa as mesmas datas do filtro) -->
-            <?= form_open(site_url('relatorio/exportarCsv'), ['method' => 'get']) ?>
-            <input type="hidden" name="data_inicio" value="<?= esc($data_inicio) ?>">
-            <input type="hidden" name="data_fim" value="<?= esc($data_fim) ?>">
-            <button type="submit" class="btn btn-success">Exportar CSV</button>
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Data Fim (Caixa)</label>
+                        <div class="control has-icons-left">
+                            <input type="date" name="data_fim" value="<?= esc($data_fim) ?>" required class="input">
+                            <span class="icon is-small is-left"><i class="fas fa-calendar-alt"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column is-narrow">
+                    <div class="field">
+                        <div class="control">
+                            <button type="submit" class="button is-link has-text-weight-semibold">
+                                Filtrar Relatório
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
             <?= form_close() ?>
         </div>
 
-        <!-- Cabeçalho de Impressão -->
-        <div class="print-header" style="display: none;">
-            <h2>Relatório de Transações</h2>
-            <p>Período: <?= esc($periodo_txt) ?></p>
+        <div class="level is-hidden-print mb-5">
+            <div class="level-left"></div>
+            <div class="level-right">
+                <div class="buttons">
+                    <button onclick="window.print()" class="button is-dark">
+                        <span class="icon"><i class="fas fa-print"></i></span>
+                        <span>Imprimir</span>
+                    </button>
+
+                    <?= form_open(site_url('relatorio/exportarCsv'), ['method' => 'get', 'class' => 'is-inline']) ?>
+                    <input type="hidden" name="data_inicio" value="<?= esc($data_inicio) ?>">
+                    <input type="hidden" name="data_fim" value="<?= esc($data_fim) ?>">
+                    <button type="submit" class="button is-success">
+                        <span class="icon"><i class="fas fa-file-csv"></i></span>
+                        <span>Exportar CSV</span>
+                    </button>
+                    <?= form_close() ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="is-hidden-tablet is-visible-print-block has-text-centered mb-4">
+            <h2 class="title is-4">Relatório de Transações</h2>
+            <p class="subtitle is-6">Período: <?= esc($periodo_txt) ?></p>
         </div>
 
         <?php if (!empty($transacoes)): ?>
-            <div class="table-responsive">
-                <table>
+
+            <div class="box p-0" style="overflow-x: auto;">
+                <table class="table is-fullwidth is-striped is-hoverable is-bordered">
                     <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Tipo</th>
-                            <th>Valor</th>
-                            <th>Vencimento</th>
-                            <th>Data Caixa (DFC)</th>
-                            <th>Status</th>
-                            <th>Descrição</th>
-                            <th>Categoria</th>
-                            <!-- <th>Pessoa</th> -->
+                        <tr class="has-background-link has-text-white">
+                            <th class="has-text-white is-size-7">ID</th>
+                            <th class="has-text-white is-size-7">Tipo</th>
+                            <th class="has-text-white is-size-7 has-text-right">Valor</th>
+                            <th class="has-text-white is-size-7">Vencimento</th>
+                            <th class="has-text-white is-size-7">Data Caixa</th>
+                            <th class="has-text-white is-size-7">Status</th>
+                            <th class="has-text-white is-size-7">Descrição</th>
+                            <th class="has-text-white is-size-7">Categoria</th>
+                            <th class="has-text-white is-size-7">Fluxo</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $totalEntradas = 0;
                         $totalSaidas = 0;
+
                         foreach ($transacoes as $transacao):
                             $valor = (float)$transacao['valor'];
                             if ($transacao['tipo'] === 'RECEBER') {
                                 $totalEntradas += $valor;
-                                $badgeClass = 'badge-entrada';
+                                $tagClass = 'is-success is-light';
                             } else {
                                 $totalSaidas += $valor;
-                                $badgeClass = 'badge-saida';
+                                $tagClass = 'is-danger is-light';
                             }
                         ?>
                             <tr>
-                                <td><?= esc($transacao['id']) ?></td>
-                                <td><span class="<?= $badgeClass ?>"><?= esc($transacao['tipo']) ?></span></td>
-                                <td style="text-align: right;">R$ <?= number_format($valor, 2, ',', '.') ?></td>
-                                <td><?= date('d/m/Y', strtotime($transacao['data_vencimento'])) ?></td>
-                                <td><?= $transacao['data_caixa'] ? date('d/m/Y', strtotime($transacao['data_caixa'])) : 'N/A' ?></td>
-                                <td><?= esc($transacao['status']) ?></td>
-                                <td><?= esc($transacao['descricao']) ?></td>
-                                <td><?= esc($transacao['categoria_nome'] ?? 'N/A') ?></td>
-                                <!-- <td><?= esc($transacao['pessoa_nome'] ?? 'N/A') ?></td> -->
+                                <td class="is-size-7"><?= esc($transacao['id']) ?></td>
+                                <td>
+                                    <span class="tag <?= $tagClass ?> is-small">
+                                        <?= esc($transacao['tipo']) ?>
+                                    </span>
+                                </td>
+                                <td class="is-size-7 has-text-right is-family-monospace">
+                                    <?= number_format($valor, 2, ',', '.') ?>
+                                </td>
+                                <td class="is-size-7"><?= date('d/m/Y', strtotime($transacao['data_vencimento'])) ?></td>
+                                <td class="is-size-7"><?= $transacao['data_caixa'] ? date('d/m/Y', strtotime($transacao['data_caixa'])) : '-' ?></td>
+                                <td class="is-size-7"><?= esc($transacao['status']) ?></td>
+                                <td class="is-size-7" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                    <?= esc($transacao['descricao']) ?>
+                                </td>
+                                <td class="is-size-7"><?= esc($transacao['categoria_nome'] ?? '-') ?></td>
+                                <td class="is-size-7"><?= esc($transacao['tipo_fluxo_categoria'] ?? '-') ?></td>
                             </tr>
                         <?php endforeach; ?>
+                    </tbody>
 
-                        <!-- Linha de Totais -->
-                        <tr class="total-row">
-                            <td colspan="2">Totais do Período</td>
+                    <tfoot>
+                        <tr class="has-background-grey-lighter">
+                            <td colspan="2" class="has-text-weight-bold">TOTAIS</td>
 
-                            <td style="text-align: right;">
-                            <td colspan="2">
-                                <p style="margin: 0; color: #28a745;">Entradas: R$ <?= number_format($totalEntradas, 2, ',', '.') ?></p>
-                                <p style="margin: 0; color: #dc3545;">Saídas: R$ <?= number_format($totalSaidas, 2, ',', '.') ?></p>
-                            </td>
-                            </td>
-                            <td colspan="4">
-                                Saldo Final:
-                                <span style="color: <?= ($totalEntradas - $totalSaidas) >= 0 ? '#28a745' : '#dc3545' ?>;">
-                                    R$ <?= number_format($totalEntradas - $totalSaidas, 2, ',', '.') ?>
-                                </span>
+                            <td colspan="7">
+                                <div class="level is-mobile">
+                                    <div class="level-left">
+                                        <div class="mr-4 has-text-success-dark is-size-7">
+                                            <strong>Entrada:</strong> R$ <?= number_format($totalEntradas, 2, ',', '.') ?>
+                                        </div>
+                                        <div class="has-text-danger-dark is-size-7">
+                                            <strong>Saída:</strong> R$ <?= number_format($totalSaidas, 2, ',', '.') ?>
+                                        </div>
+                                    </div>
+                                    <div class="level-right">
+                                        <div class="is-size-6 has-text-weight-bold">
+                                            Saldo Final:
+                                            <span class="<?= ($totalEntradas - $totalSaidas) >= 0 ? 'has-text-success-dark' : 'has-text-danger-dark' ?>">
+                                                R$ <?= number_format($totalEntradas - $totalSaidas, 2, ',', '.') ?>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
-
-                    </tbody>
+                    </tfoot>
                 </table>
             </div>
+
         <?php else: ?>
-            <p style="text-align: center; color: #dc3545;">Nenhum registro de transação encontrado para o período de <b><?= esc($periodo_txt) ?></b>.</p>
+
+            <div class="notification is-warning is-light has-text-centered">
+                <span class="icon is-large mb-2"><i class="fas fa-exclamation-triangle fa-2x"></i></span>
+                <p>Nenhum registro de transação encontrado para o período de <strong><?= esc($periodo_txt) ?></strong>.</p>
+            </div>
+
         <?php endif; ?>
+
     </div>
+</div>
 
-</body>
-
-</html>
-
-<?php
-// Fecha a seção 'conteudo'
-$this->endSection();
-?>
+<?php $this->endSection(); ?>

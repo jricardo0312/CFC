@@ -16,6 +16,7 @@ class PessoaModel extends Model
     protected $allowedFields    = [
         'nome',
         'email',
+        'tipo_cliente',
         'tipo_documento',
         'documento'
     ];
@@ -36,6 +37,8 @@ class PessoaModel extends Model
         // Ex: is_unique[tabela.campo,campo_a_ignorar,valor_a_ignorar]
         'email' => 'required|valid_email|is_unique[pessoas.email,id,{id}]',
 
+        'tipo_cliente' => 'required|in_list[Ana,Ricardo,Salutem]',
+
         'tipo_documento' => 'required|in_list[CPF,CNPJ]',
 
         'documento' => 'required|min_length[11]|max_length[14]|is_unique[pessoas.documento,id,{id}]'
@@ -51,6 +54,10 @@ class PessoaModel extends Model
             'required' => 'O campo E-mail é obrigatório.',
             'valid_email' => 'Por favor, insira um E-mail válido.',
             'is_unique' => 'Este E-mail já está cadastrado em outro registro.',
+        ],
+        'tipo_cliente' => [
+            'required' => 'Selecione o Tipo de Cliente (Ana, Ricardo ou Salutem).',
+            'in_list' => 'Tipo de cliente inválido.',
         ],
         'tipo_documento' => [
             'required' => 'Selecione o Tipo de Documento (CPF ou CNPJ).',
